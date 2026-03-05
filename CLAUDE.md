@@ -13,7 +13,7 @@ This is inspired by an internal library (see `think` function in the original co
 
 ## Mental Model
 
-Thinker CLI is a **stateless state machine driver**. A "thought process" is a config file defining ordered steps. The CLI tracks progress on disk and emits formatted text instructions for the agent on each invocation.
+Thinker CLI is a **state machine driver**. A "thought process" is a config file defining ordered steps. The CLI persists progress to disk between invocations and emits formatted text instructions for the agent each time it's called.
 
 **Key concepts:**
 
