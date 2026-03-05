@@ -140,23 +140,73 @@ To continue, run:
   }'
 ```
 
-**Invocation 3** — agent provides ranking, gets the final step with `{{ranked}}` interpolated. Agent returns the action plan.
-
-**Final invocation:**
+**Invocation 3** — CLI merges `ranked` into shared space, shows final step:
 ```
-$ thinker prioritise-tasks.json '{ "actionPlan": "## Action Plan\n\n1. Fix login bug — ..." }'
+$ thinker prioritise-tasks.json '{ "ranked": [{"id":"1","title":"Fix login bug","score":9,"reasoning":"High impact, low effort"},{"id":"3","title":"Add CSV export","score":5,"reasoning":"Medium impact and effort"},{"id":"2","title":"Redesign dashboard","score":2,"reasoning":"High impact but very high effort"}] }'
+```
+```
+Steps:
+  ✓ 1. gather
+  ✓ 2. rank
+  ▶ 3. plan
+
+╭──────────────────────────────────────╮
+│  STEP 3/3 — plan                     │
+╰──────────────────────────────────────╯
+
+Here is the ranked task list:
+
+┌ ranked ──────────────────────────────┐
+│ [{"id":"1","title":"Fix login bug",  │
+│   "score":9,"reasoning":"High        │
+│   impact, low effort"},              │
+│  {"id":"3","title":"Add CSV export", │
+│   "score":5,"reasoning":"Medium      │
+│   impact and effort"},               │
+│  {"id":"2","title":"Redesign         │
+│   dashboard","score":2,              │
+│   "reasoning":"High impact but very  │
+│   high effort"}]                     │
+└──────────────────────────────────────┘
+
+Pick the top 3 and write a short action plan for each.
+
+────────────────────────────────────────
+To continue, run:
+
+  thinker prioritise-tasks.json '{
+    "actionPlan": string
+  }'
+```
+
+**Invocation 4** — agent provides the final output, process completes:
+```
+$ thinker prioritise-tasks.json '{ "actionPlan": "## Action Plan\n\n1. **Fix login bug** — Reproduce with test account, patch session handler, add regression test.\n2. **Add CSV export** — Add export button to list views, stream rows to avoid memory issues.\n3. **Redesign dashboard** — Start with wireframes, get stakeholder sign-off before dev." }'
 ```
 ```
 ╭──────────────────────────────────────╮
 │  COMPLETE                            │
 ╰──────────────────────────────────────╯
 
+Steps:
+  ✓ 1. gather
+  ✓ 2. rank
+  ✓ 3. plan
+
 Final output:
 
 ┌ actionPlan ──────────────────────────┐
 │ ## Action Plan                       │
 │                                      │
-│ 1. Fix login bug — ...               │
+│ 1. **Fix login bug** — Reproduce     │
+│    with test account, patch session  │
+│    handler, add regression test.     │
+│ 2. **Add CSV export** — Add export   │
+│    button to list views, stream rows │
+│    to avoid memory issues.           │
+│ 3. **Redesign dashboard** — Start    │
+│    with wireframes, get stakeholder  │
+│    sign-off before dev.              │
 └──────────────────────────────────────┘
 
 (Progress file cleaned up)
