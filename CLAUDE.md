@@ -24,6 +24,11 @@ Thinker CLI is a **stateless state machine driver**. A "thought process" is a co
 - **Invocation loop** — each step forward-directs the next. The CLI shows directions (with shared space values interpolated), then tells the agent exactly how to call back with the required output shape. The agent reasons, acts, and invokes the CLI with a JSON object matching the declared output.
 - **Lifecycle**: no progress file → `thinker config.json` starts at step 0 (no args). Progress file exists → `thinker config.json '{"key": value}'` continues, providing the current step's output. `thinker reset config.json` → deletes progress file.
 
+**Agent-first design:** This is a CLI built for AI agents, not humans. Every interaction is optimised for agent success:
+- **Fail fast** — validate everything on input (args shape, output keys, JSON parse, config structure). Never proceed with bad state.
+- **Helpful errors** — every error message explains exactly what went wrong, what was expected, and how to retry correctly.
+- **Show the manual** — on first invocation (step 0), print the full user manual (how the process works, what's expected at each step). On any error, print it again. Agents learn fast when given complete context.
+
 **What the CLI does NOT do:** run inference or manage conversation history. The agent owns all reasoning and memory.
 
 ## Requirements
