@@ -44,7 +44,8 @@ Thinker CLI is a **stateless state machine driver**. A "thought process" is a co
 - **output-format** — CLI output is nicely formatted text. Shows progress (e.g. step 2/5), highlights the current step, clearly demarcates interpolated values from prior steps, and tells the agent exactly how to call back including the required JSON shape derived from the step's `output` declaration.
 - **directions-interpolation** — directions can reference `{{key}}` where `key` is any property in the shared space from a prior step's output.
 - **agent-first-errors** — validate all input strictly (JSON parsing, expected output keys, no extra keys, config structure). On failure: explain what went wrong, show what was expected, and tell the agent exactly how to retry. Include the full user manual on first invocation and on any error.
-- **agent-first-manual** — a complete usage guide printed at step 0 and on errors. Covers: how the process works, what the agent is expected to do, how to call back, the full step list with output shapes.
+- **agent-first-manual** — a CLI usage guide printed at step 0 and on errors. Covers: invocation syntax, how to pass args, how to reset. Does NOT reveal step content — only how to operate the tool.
+- **step-isolation** — only the current step's directions and output shape are shown. Past and future steps are never revealed. This is critical for effective chain-of-thought — agents will try to skip ahead if they can see what's coming.
 
 ## Usage Example
 
