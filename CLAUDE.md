@@ -28,16 +28,15 @@ Thinker CLI is a **stateless state machine driver**. A "thought process" is a co
 
 ## Requirements
 
-- **invoke** — `thinker <config-path> '<json-args>'` advances the thought process. Reads progress file, records args from the agent, moves to the next step, and emits formatted instructions for the current step.
-- **start** — if no progress file exists for a config, the first invocation starts the process at step 0.
-- **continue** — if a progress file exists, the invocation continues from the current step, incorporating the agent's provided args as the output of the previous step.
+- **start** — `thinker <config-path>` with no args starts the process at step 0. Fails if a progress file already exists (agent must reset first or continue with args).
+- **continue** — `thinker <config-path> '<json>'` advances the process. The JSON must be an object whose keys match the current step's declared `output`. The CLI merges those keys into the shared space, advances to the next step, and emits its directions.
 - **complete** — when all steps are done, emit the final result and clean up the progress file.
 - **reset** — `thinker reset <config-path>` deletes the progress file, allowing a fresh start.
-- **config-format** — config is a JSON file at a given path. Defines an ordered list of steps, each with at minimum `label` and `directions`.
-- **progress-tracking** — progress is saved to disk, keyed to the config file path. Stores current step index and accumulated step outputs.
-- **output-format** — CLI output is nicely formatted text. Shows progress (e.g. step 2/5), highlights the current step, clearly demarcates interpolated variables from prior steps, and tells the agent exactly how to call back.
-- **no-schema-validation** — step outputs are freeform (string or JSON). The CLI does not validate structure — it's agent-first and flexible.
-- **directions-interpolation** — directions can reference outputs from prior steps so configs can build on earlier reasoning.
+- **config-format** — JSON file with an ordered list of steps. Each step has `label` (string), `directions` (string), and `output` (map of key names to TypeScript-style type descriptions, e.g. `{ "tasks": "Array<{ id: string; title: string }>" }`).
+- **config-validation** — at load time, reject configs where two steps declare the same output key. Variables are immutable — no collisions allowed.
+- **progress-tracking** — progress is saved to disk, keyed to the config file path. Stores current step index and the shared space (all accumulated output key-value pairs).
+- **output-format** — CLI output is nicely formatted text. Shows progress (e.g. step 2/5), highlights the current step, clearly demarcates interpolated values from prior steps, and tells the agent exactly how to call back including the required JSON shape derived from the step's `output` declaration.
+- **directions-interpolation** — directions can reference `{{key}}` where `key` is any property in the shared space from a prior step's output.
 
 ## Usage Example
 
