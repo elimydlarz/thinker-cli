@@ -28,7 +28,7 @@ Thinker CLI is a **state machine driver**. A "thought process" is a config file 
 - **Fail fast** — validate everything on input (args shape, output keys, JSON parse, config structure). Never proceed with bad state.
 - **Helpful errors** — every error message explains exactly what went wrong, what was expected, and how to retry correctly.
 - **Show the manual** — on first invocation and on any error, print the CLI user manual (invocation syntax, args format, reset command). This is about how to use the tool, not the thought process content.
-- **Step isolation** — only ever show the current step's directions. Never reveal past or future step content — this prevents agents from skipping ahead or biasing their reasoning toward later steps.
+- **Step isolation** — show all step labels so the agent understands the overall plan and where it is (with the current step highlighted). Show the current step's directions, output shape, and results from prior steps. But never reveal other steps' directions or future steps' output shapes — this prevents agents from skipping ahead or biasing their reasoning.
 
 **What the CLI does NOT do:** run inference or manage conversation history. The agent owns all reasoning and memory.
 
