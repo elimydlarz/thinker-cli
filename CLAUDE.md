@@ -83,6 +83,11 @@ Thinker CLI is a **state machine driver**. A "thought process" is a config file 
 $ thinker prioritise-tasks.json
 ```
 ```
+Steps:
+  ▶ 1. gather
+    2. rank
+    3. plan
+
 ╭──────────────────────────────────────╮
 │  STEP 1/3 — gather                   │
 ╰──────────────────────────────────────╯
