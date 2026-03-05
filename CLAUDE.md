@@ -1,51 +1,52 @@
 # Thinker CLI
 
-Thinker CLI is an orchestrator that guides an external AI agent through a multi-step thought process. It persists state to disk between invocations. Instead of running inference itself, it:
+Thinker CLI is an orchestrator that guides an AI agent through a multi-step thought process. It owns the plan; the agent owns the reasoning and memory. The CLI persists state to disk between invocations, and on each call it tells the agent what to think about next and exactly how to call back with its answer. The agent reasons, acts, calls back, and the CLI advances the state machine — step by step until the process completes.
 
-1. Takes a config defining a sequence of steps (each with directions)
-2. On each invocation, prompts the agent with what to do next and how to invoke the CLI again with its result
-3. The agent reasons, acts, then calls the CLI again with its output — advancing the state machine
-4. This loops until all steps are complete, at which point the final result is returned
-
-The agent replaces LLM inference, and the CLI replaces orchestration logic. The agent just follows the CLI's instructions until it gets a terminal result.
-
-This is inspired by an internal library (see `think` function in the original codebase) that recursively iterates through preconfigured thought process steps using Google GenAI — but "unrolled" across multiple CLI invocations so any agent can drive the process.
+This is inspired by an internal library that recursively iterates through preconfigured thought process steps using Google GenAI — but "unrolled" across multiple CLI invocations so any agent can drive the process.
 
 ## Mental Model
 
-Thinker CLI is a **state machine driver**. A "thought process" is a config file defining ordered steps. The CLI persists progress to disk between invocations and emits formatted text instructions for the agent each time it's called.
+### Core domain
 
-**Key concepts:**
+- **Config** — a JSON file defining an ordered sequence of steps. This is the thought process blueprint. It is read-only at runtime.
+- **Step** — a single unit of work in a thought process. Has a `label` (human-readable name), `directions` (what the agent should do, as prose), and `output` (a declaration of the named variables the agent must return, with TypeScript-style type descriptions).
+- **Shared space** — a flat, append-only namespace of variables accumulated across steps. Each step's `output` keys merge into the shared space when the agent provides them. Keys are immutable — once set, they never change. No two steps may declare the same key (enforced at config load time).
+- **Progress file** — the on-disk state for an in-flight thought process, keyed to the config file path. Contains the current step index and the shared space. This is how the CLI remembers where the agent is between invocations.
 
-- **Config** — a JSON file defining an ordered list of steps. Each step has a `label`, `directions`, and an `output` declaration (a map of key names to TypeScript-style type descriptions). Directions are verbal/descriptive — the agent reads them as text.
-- **Shared space** — a flat namespace of all accumulated output properties from completed steps. Each step's `output` keys merge into this space. Keys are immutable — once set, they never change. Later steps reference these values via `{{key}}` interpolation in their directions.
-- **Output declaration** — each step declares the JSON keys the agent must provide to advance. This serves double duty: it's the contract the agent must fulfil, and the template for the "call me back with..." instruction the CLI prints. Types use TypeScript notation (e.g. `"string"`, `"Array<{ id: string; title: string }>"`, `"number"`).
-- **Progress file** — persisted to disk, keyed to the config file. Tracks current step index and the shared space. This is the only state.
-- **Invocation loop** — each step forward-directs the next. The CLI shows directions (with shared space values interpolated), then tells the agent exactly how to call back with the required output shape. The agent reasons, acts, and invokes the CLI with a JSON object matching the declared output.
-- **Lifecycle**: no progress file → `thinker config.json` starts at step 0 (no args). Progress file exists → `thinker config.json '{"key": value}'` continues, providing the current step's output. `thinker reset config.json` → deletes progress file.
+### Operating principles
 
-**Agent-first design:** This is a CLI built for AI agents, not humans. Every interaction is optimised for agent success:
-- **Fail fast** — validate everything on input (args shape, output keys, JSON parse, config structure). Never proceed with bad state.
-- **Helpful errors** — every error message explains exactly what went wrong, what was expected, and how to retry correctly.
-- **Show the manual** — on first invocation and on any error, print the CLI user manual (invocation syntax, args format, reset command). This is about how to use the tool, not the thought process content.
-- **Step isolation** — show all step labels so the agent understands the overall plan and where it is (with the current step highlighted). Show the current step's directions, output shape, and results from prior steps. But never reveal other steps' directions or future steps' output shapes — this prevents agents from skipping ahead or biasing their reasoning.
+- **Forward-directing** — each invocation tells the agent what to do and exactly how to call back. The output declaration serves double duty: it's the contract the agent must fulfil, and the template for the callback instruction.
+- **Step isolation** — the agent sees all step labels (with the current one highlighted and completed ones marked) so it understands the overall plan and its place in it. It sees the current step's directions and output shape, and values from prior steps interpolated into the directions. It never sees other steps' directions or future steps' output shapes. This prevents agents from skipping ahead — they will try.
+- **Agent-first** — this CLI is built for AI agents, not humans. It validates everything on input and fails fast with errors that explain what went wrong, what was expected, and how to retry. On first invocation and on any error, it prints the full CLI user manual (invocation syntax, args format, reset command) — not the thought process content, just how to operate the tool. Agents learn fast when given complete context at the right moments.
+- **Interpolation** — directions can contain `{{key}}` placeholders that are replaced with the corresponding value from the shared space. This is how later steps build on earlier reasoning.
 
-**What the CLI does NOT do:** run inference or manage conversation history. The agent owns all reasoning, memory, and context management.
+### Lifecycle
+
+1. `thinker config.json` — no progress file exists, so the CLI starts at step 0 (no args). Prints the user manual, the step list, and the first step's directions + output shape.
+2. `thinker config.json '{"key": value}'` — progress file exists. The CLI validates the JSON keys match the current step's output declaration, merges them into the shared space, saves progress, advances to the next step, and prints that step's directions (with interpolated values) + output shape.
+3. Repeat until all steps are complete.
+4. On the final invocation, the CLI emits the completed result and cleans up the progress file.
+5. `thinker reset config.json` — deletes the progress file at any point, allowing a fresh start.
 
 ## Requirements
 
-- **start** — `thinker <config-path>` with no args starts the process at step 0. Fails if a progress file already exists (agent must reset first or continue with args).
+### Functional
+
+- **start** — `thinker <config-path>` with no args starts the process at step 0. Fails if a progress file already exists (agent must reset or continue with args).
 - **continue** — `thinker <config-path> '<json>'` advances the process. The JSON must be an object whose keys match the current step's declared `output`. The CLI merges those keys into the shared space, advances to the next step, and emits its directions.
 - **complete** — when all steps are done, emit the final result and clean up the progress file.
 - **reset** — `thinker reset <config-path>` deletes the progress file, allowing a fresh start.
 - **config-format** — JSON file with an ordered list of steps. Each step has `label` (string), `directions` (string), and `output` (map of key names to TypeScript-style type descriptions, e.g. `{ "tasks": "Array<{ id: string; title: string }>" }`).
 - **config-validation** — at load time, reject configs where two steps declare the same output key. Variables are immutable — no collisions allowed.
 - **progress-tracking** — progress is saved to disk, keyed to the config file path. Stores current step index and the shared space (all accumulated output key-value pairs).
-- **output-format** — CLI output is nicely formatted text. Shows progress (e.g. step 2/5), highlights the current step, clearly demarcates interpolated values from prior steps, and tells the agent exactly how to call back including the required JSON shape derived from the step's `output` declaration.
-- **directions-interpolation** — directions can reference `{{key}}` where `key` is any property in the shared space from a prior step's output.
-- **agent-first-errors** — validate all input strictly (JSON parsing, expected output keys, no extra keys, config structure). On failure: explain what went wrong, show what was expected, and tell the agent exactly how to retry. Include the full user manual on first invocation and on any error.
-- **agent-first-manual** — a CLI usage guide printed at step 0 and on errors. Covers: invocation syntax, how to pass args, how to reset. Does NOT reveal step content — only how to operate the tool.
-- **step-isolation** — show all step labels (current highlighted) so the agent sees the overall plan. Show the current step's directions + output shape + prior step results. Never reveal other steps' directions or future output shapes. Agents will skip ahead if they can see what's coming.
+- **directions-interpolation** — directions can contain `{{key}}` placeholders. The CLI replaces them with the corresponding value from the shared space before displaying.
+
+### Cross-functional
+
+- **output-format** — CLI output is nicely formatted text. Shows the step list (completed/current/future), the current step's directions with interpolated values visually demarcated, and the exact callback command with the required JSON shape.
+- **step-isolation** — show all step labels (completed marked, current highlighted, future listed). Show the current step's directions + output shape + interpolated prior values. Never reveal other steps' directions or future output shapes.
+- **agent-first-errors** — validate all input strictly (JSON parsing, expected output keys, config structure). On failure: explain what went wrong, show what was expected, tell the agent exactly how to retry, and reprint the CLI user manual.
+- **agent-first-manual** — a CLI usage guide printed at step 0 and on errors. Covers invocation syntax, how to pass args, how to reset. This is about how to use the tool — it does not reveal thought process content.
 
 ## Usage Example
 
