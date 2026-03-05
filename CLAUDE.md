@@ -46,15 +46,24 @@ Thinker CLI is a **stateless state machine driver**. A "thought process" is a co
   "steps": [
     {
       "label": "gather",
-      "directions": "List all open tasks from the project board. Return them as a JSON array of { id, title, effort }."
+      "directions": "List all open tasks from the project board.",
+      "output": {
+        "tasks": "Array<{ id: string; title: string; effort: 'S' | 'M' | 'L' }>"
+      }
     },
     {
       "label": "rank",
-      "directions": "Here are the open tasks:\n\n{{gather}}\n\nRank them by impact-to-effort ratio. Return a JSON array sorted highest-first with { id, title, score, reasoning }."
+      "directions": "Here are the open tasks:\n\n{{tasks}}\n\nRank them by impact-to-effort ratio, highest first.",
+      "output": {
+        "ranked": "Array<{ id: string; title: string; score: number; reasoning: string }>"
+      }
     },
     {
       "label": "plan",
-      "directions": "Here is the ranked task list:\n\n{{rank}}\n\nPick the top 3 and write a short action plan for each. Return a markdown document."
+      "directions": "Here is the ranked task list:\n\n{{ranked}}\n\nPick the top 3 and write a short action plan for each.",
+      "output": {
+        "actionPlan": "string"
+      }
     }
   ]
 }
@@ -69,19 +78,22 @@ $ thinker prioritise-tasks.json
 │  STEP 1/3 — gather                   │
 ╰──────────────────────────────────────╯
 
-List all open tasks from the project board. Return them as a JSON array of { id, title, effort }.
+List all open tasks from the project board.
 
 ────────────────────────────────────────
 To continue, run:
-  thinker prioritise-tasks.json '<your result>'
+
+  thinker prioritise-tasks.json '{
+    "tasks": Array<{ id: string; title: string; effort: 'S' | 'M' | 'L' }>
+  }'
 ```
 
 The agent reads the board, reasons, and calls back:
 ```
-$ thinker prioritise-tasks.json '[{"id":1,"title":"Fix login bug","effort":"S"},{"id":2,"title":"Redesign dashboard","effort":"L"},{"id":3,"title":"Add CSV export","effort":"M"}]'
+$ thinker prioritise-tasks.json '{ "tasks": [{"id":"1","title":"Fix login bug","effort":"S"},{"id":"2","title":"Redesign dashboard","effort":"L"},{"id":"3","title":"Add CSV export","effort":"M"}] }'
 ```
 
-**Invocation 2** — CLI records the gather output, shows the next step with it interpolated:
+**Invocation 2** — CLI merges `tasks` into shared space, shows next step with it interpolated:
 ```
 ╭──────────────────────────────────────╮
 │  STEP 2/3 — rank                     │
@@ -89,40 +101,43 @@ $ thinker prioritise-tasks.json '[{"id":1,"title":"Fix login bug","effort":"S"},
 
 Here are the open tasks:
 
-┌ gather ──────────────────────────────┐
-│ [{"id":1,"title":"Fix login bug",    │
+┌ tasks ───────────────────────────────┐
+│ [{"id":"1","title":"Fix login bug",  │
 │   "effort":"S"},                     │
-│  {"id":2,"title":"Redesign           │
+│  {"id":"2","title":"Redesign         │
 │   dashboard","effort":"L"},          │
-│  {"id":3,"title":"Add CSV export",   │
+│  {"id":"3","title":"Add CSV export", │
 │   "effort":"M"}]                     │
 └──────────────────────────────────────┘
 
-Rank them by impact-to-effort ratio. Return a JSON array sorted highest-first with { id, title, score, reasoning }.
+Rank them by impact-to-effort ratio, highest first.
 
 ────────────────────────────────────────
 To continue, run:
-  thinker prioritise-tasks.json '<your result>'
+
+  thinker prioritise-tasks.json '{
+    "ranked": Array<{ id: string; title: string; score: number; reasoning: string }>
+  }'
 ```
 
-**Invocation 3** — agent provides ranking, gets the final step:
-```
-$ thinker prioritise-tasks.json '[{"id":1,...},{"id":3,...},{"id":2,...}]'
-```
-Output shows step 3/3 with `{{rank}}` interpolated. Agent returns the action plan.
+**Invocation 3** — agent provides ranking, gets the final step with `{{ranked}}` interpolated. Agent returns the action plan.
 
 **Final invocation:**
 ```
-$ thinker prioritise-tasks.json '## Action Plan\n\n1. Fix login bug — ...'
+$ thinker prioritise-tasks.json '{ "actionPlan": "## Action Plan\n\n1. Fix login bug — ..." }'
 ```
 ```
 ╭──────────────────────────────────────╮
 │  COMPLETE                            │
 ╰──────────────────────────────────────╯
 
-## Action Plan
+Final output:
 
-1. Fix login bug — ...
+┌ actionPlan ──────────────────────────┐
+│ ## Action Plan                       │
+│                                      │
+│ 1. Fix login bug — ...               │
+└──────────────────────────────────────┘
 
 (Progress file cleaned up)
 ```
