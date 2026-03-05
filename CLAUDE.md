@@ -1,6 +1,6 @@
 # Thinker CLI
 
-Thinker CLI is a stateless orchestrator that guides an external AI agent through a multi-step thought process. Instead of running inference itself, it:
+Thinker CLI is an orchestrator that guides an external AI agent through a multi-step thought process. It persists state to disk between invocations. Instead of running inference itself, it:
 
 1. Takes a config defining a sequence of steps (each with directions)
 2. On each invocation, prompts the agent with what to do next and how to invoke the CLI again with its result
