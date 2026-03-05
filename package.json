@@ -1,9 +1,13 @@
 {
   "name": "thinker-cli",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "An orchestrator that guides an AI agent through a multi-step thought process",
+  "type": "module",
+  "bin": {
+    "thinker": "./dist/cli.js"
+  },
   "scripts": {
+    "build": "tsc",
     "test": "vitest run"
   },
   "keywords": [],
