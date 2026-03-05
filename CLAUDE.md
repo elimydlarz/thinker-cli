@@ -37,6 +37,100 @@ Thinker CLI is a **stateless state machine driver**. A "thought process" is a co
 - **no-schema-validation** — step outputs are freeform (string or JSON). The CLI does not validate structure — it's agent-first and flexible.
 - **directions-interpolation** — directions can reference outputs from prior steps so configs can build on earlier reasoning.
 
+## Usage Example
+
+**Config** — `prioritise-tasks.json`:
+```json
+{
+  "steps": [
+    {
+      "label": "gather",
+      "directions": "List all open tasks from the project board. Return them as a JSON array of { id, title, effort }."
+    },
+    {
+      "label": "rank",
+      "directions": "Here are the open tasks:\n\n{{gather}}\n\nRank them by impact-to-effort ratio. Return a JSON array sorted highest-first with { id, title, score, reasoning }."
+    },
+    {
+      "label": "plan",
+      "directions": "Here is the ranked task list:\n\n{{rank}}\n\nPick the top 3 and write a short action plan for each. Return a markdown document."
+    }
+  ]
+}
+```
+
+**Invocation 1** — agent starts the process:
+```
+$ thinker prioritise-tasks.json
+```
+```
+╭──────────────────────────────────────╮
+│  STEP 1/3 — gather                   │
+╰──────────────────────────────────────╯
+
+List all open tasks from the project board. Return them as a JSON array of { id, title, effort }.
+
+────────────────────────────────────────
+To continue, run:
+  thinker prioritise-tasks.json '<your result>'
+```
+
+The agent reads the board, reasons, and calls back:
+```
+$ thinker prioritise-tasks.json '[{"id":1,"title":"Fix login bug","effort":"S"},{"id":2,"title":"Redesign dashboard","effort":"L"},{"id":3,"title":"Add CSV export","effort":"M"}]'
+```
+
+**Invocation 2** — CLI records the gather output, shows the next step with it interpolated:
+```
+╭──────────────────────────────────────╮
+│  STEP 2/3 — rank                     │
+╰──────────────────────────────────────╯
+
+Here are the open tasks:
+
+┌ gather ──────────────────────────────┐
+│ [{"id":1,"title":"Fix login bug",    │
+│   "effort":"S"},                     │
+│  {"id":2,"title":"Redesign           │
+│   dashboard","effort":"L"},          │
+│  {"id":3,"title":"Add CSV export",   │
+│   "effort":"M"}]                     │
+└──────────────────────────────────────┘
+
+Rank them by impact-to-effort ratio. Return a JSON array sorted highest-first with { id, title, score, reasoning }.
+
+────────────────────────────────────────
+To continue, run:
+  thinker prioritise-tasks.json '<your result>'
+```
+
+**Invocation 3** — agent provides ranking, gets the final step:
+```
+$ thinker prioritise-tasks.json '[{"id":1,...},{"id":3,...},{"id":2,...}]'
+```
+Output shows step 3/3 with `{{rank}}` interpolated. Agent returns the action plan.
+
+**Final invocation:**
+```
+$ thinker prioritise-tasks.json '## Action Plan\n\n1. Fix login bug — ...'
+```
+```
+╭──────────────────────────────────────╮
+│  COMPLETE                            │
+╰──────────────────────────────────────╯
+
+## Action Plan
+
+1. Fix login bug — ...
+
+(Progress file cleaned up)
+```
+
+**Reset:**
+```
+$ thinker reset prioritise-tasks.json
+```
+
 ## Repo Map
 
 - `src/` — source code and tests (colocated `*.test.ts` files)
