@@ -109,6 +109,11 @@ $ thinker prioritise-tasks.json '{ "tasks": [{"id":"1","title":"Fix login bug","
 
 **Invocation 2** — CLI merges `tasks` into shared space, shows next step with it interpolated:
 ```
+Steps:
+  ✓ 1. gather
+  ▶ 2. rank
+    3. plan
+
 ╭──────────────────────────────────────╮
 │  STEP 2/3 — rank                     │
 ╰──────────────────────────────────────╯
