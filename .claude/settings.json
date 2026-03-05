@@ -1,0 +1,7 @@
+{
+  "enabledPlugins": {
+    "test-trees@test-trees": true,
+    "req-mod-sync@req-mod-sync": true,
+    "trunk-sync@trunk-sync": true
+  }
+}
