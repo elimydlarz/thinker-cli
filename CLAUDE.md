@@ -17,12 +17,14 @@ Thinker CLI is a **stateless state machine driver**. A "thought process" is a co
 
 **Key concepts:**
 
-- **Config** (`thoughts.json`) — a JSON file defining an ordered list of steps, each with a label and directions. Directions are verbal/descriptive — no schemas, since different agents work differently.
-- **Progress file** — persisted to disk, keyed to the config file. Tracks which step the agent is on and the accumulated outputs from prior steps. This is the only state.
-- **Invocation loop** — the agent calls `thinker <config> [args]`. The CLI reads the progress file, records the agent's input, advances the step, and emits the next step's instructions (or the final result). The agent reads the output, reasons, acts, and calls back.
-- **Lifecycle**: no progress file → start at step 0. Progress file exists → continue from current step. `thinker reset <config>` → delete progress file.
+- **Config** — a JSON file defining an ordered list of steps. Each step has a `label`, `directions`, and an `output` declaration (a map of key names to TypeScript-style type descriptions). Directions are verbal/descriptive — the agent reads them as text.
+- **Shared space** — a flat namespace of all accumulated output properties from completed steps. Each step's `output` keys merge into this space. Keys are immutable — once set, they never change. Later steps reference these values via `{{key}}` interpolation in their directions.
+- **Output declaration** — each step declares the JSON keys the agent must provide to advance. This serves double duty: it's the contract the agent must fulfil, and the template for the "call me back with..." instruction the CLI prints. Types use TypeScript notation (e.g. `"string"`, `"Array<{ id: string; title: string }>"`, `"number"`).
+- **Progress file** — persisted to disk, keyed to the config file. Tracks current step index and the shared space. This is the only state.
+- **Invocation loop** — each step forward-directs the next. The CLI shows directions (with shared space values interpolated), then tells the agent exactly how to call back with the required output shape. The agent reasons, acts, and invokes the CLI with a JSON object matching the declared output.
+- **Lifecycle**: no progress file → `thinker config.json` starts at step 0 (no args). Progress file exists → `thinker config.json '{"key": value}'` continues, providing the current step's output. `thinker reset config.json` → deletes progress file.
 
-**What the CLI does NOT do:** run inference, validate output schemas, or manage conversation history. The agent owns all reasoning and memory. Configs can ask the agent to do things like "search memory before answering" — that's up to the config author.
+**What the CLI does NOT do:** run inference or manage conversation history. The agent owns all reasoning and memory.
 
 ## Requirements
 
