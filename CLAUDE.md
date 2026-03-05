@@ -27,7 +27,8 @@ Thinker CLI is a **stateless state machine driver**. A "thought process" is a co
 **Agent-first design:** This is a CLI built for AI agents, not humans. Every interaction is optimised for agent success:
 - **Fail fast** — validate everything on input (args shape, output keys, JSON parse, config structure). Never proceed with bad state.
 - **Helpful errors** — every error message explains exactly what went wrong, what was expected, and how to retry correctly.
-- **Show the manual** — on first invocation (step 0), print the full user manual (how the process works, what's expected at each step). On any error, print it again. Agents learn fast when given complete context.
+- **Show the manual** — on first invocation and on any error, print the CLI user manual (invocation syntax, args format, reset command). This is about how to use the tool, not the thought process content.
+- **Step isolation** — only ever show the current step's directions. Never reveal past or future step content — this prevents agents from skipping ahead or biasing their reasoning toward later steps.
 
 **What the CLI does NOT do:** run inference or manage conversation history. The agent owns all reasoning and memory.
 
