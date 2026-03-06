@@ -125,7 +125,7 @@ export function formatCallback(
   return [
     color.dim("To continue, run:"),
     "",
-    `  ${color.green("thinker")} ${configPath} '${color.dim("{")}`,
+    `  ${color.green(`thinker ${configPath}`)} '${color.dim("{")}`,
     entries,
     `  ${color.dim("}")}'`,
   ].join("\n");
