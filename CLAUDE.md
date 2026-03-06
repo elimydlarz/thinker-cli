@@ -235,5 +235,7 @@ $ thinker reset prioritise-tasks.json
 
 - **Package manager:** pnpm
 - **Language:** TypeScript
+- **Build:** `pnpm build` compiles to `dist/`
 - **Test framework:** Vitest — run with `pnpm test`
 - **Test style:** tree-shaped specs using nested `describe`/`it` blocks
+- **No external runtime deps** — Node built-ins only (`fs`, `path`, `crypto`)
