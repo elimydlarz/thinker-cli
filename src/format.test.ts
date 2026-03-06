@@ -56,6 +56,50 @@ describe("format", () => {
       expect(manual).toMatch(/keys/i);
       expect(manual).toMatch(/exact/i);
     });
+
+    it("mentions the config-help command", () => {
+      const manual = formatManual("my-config.json");
+
+      expect(manual).toContain("thinker config-help");
+    });
+  });
+
+  describe("formatConfigHelp", () => {
+    it("explains the config file structure", () => {
+      const help = formatConfigHelp();
+
+      expect(help).toContain("steps");
+      expect(help).toContain("label");
+      expect(help).toContain("directions");
+      expect(help).toContain("output");
+    });
+
+    it("explains interpolation with double-brace syntax", () => {
+      const help = formatConfigHelp();
+
+      expect(help).toContain("{{");
+    });
+
+    it("explains supported types", () => {
+      const help = formatConfigHelp();
+
+      expect(help).toContain("string");
+      expect(help).toContain("number");
+      expect(help).toContain("boolean");
+      expect(help).toContain("Array");
+    });
+
+    it("includes an example config", () => {
+      const help = formatConfigHelp();
+
+      expect(help).toContain("Example");
+    });
+
+    it("explains that output keys must be unique across steps", () => {
+      const help = formatConfigHelp();
+
+      expect(help).toMatch(/unique|duplicate|collision/i);
+    });
   });
 
   describe("formatStepList", () => {
