@@ -19,7 +19,10 @@ interface RunResult {
 
 export function run(args: string[]): RunResult {
   if (args.length === 0) {
-    return error("No arguments provided.", "<config>");
+    return {
+      output: formatManual("<config>"),
+      exitCode: 0,
+    };
   }
 
   // Reset command
