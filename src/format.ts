@@ -183,6 +183,56 @@ export function formatCompletion(
   return parts.join("\n");
 }
 
+export function formatConfigHelp(): string {
+  return [
+    headerBox(color.bold("CONFIG HELP")),
+    "",
+    `  ${color.cyan("Config file structure")}`,
+    `  A config is a JSON file with a ${color.green('"steps"')} array.`,
+    "  Each step is an object with three fields:",
+    "",
+    `  ${color.green("label")}        A short name for the step (shown in the step list).`,
+    `  ${color.green("directions")}   What the agent should do (prose, shown to the agent).`,
+    `  ${color.green("output")}       An object mapping key names to TypeScript-style`,
+    "               type descriptions. These are the values the agent",
+    "               must return for this step.",
+    "",
+    `  ${color.cyan("Supported types")}`,
+    `  Primitives:  ${color.dim("string, number, boolean")}`,
+    `  Arrays:      ${color.dim('Array<string>, Array<{ "name": string }>')}`,
+    `  Objects:     ${color.dim('{ "key": string; "other": number }')}`,
+    `  Unions:      ${color.dim('"A" | "B" | "C"  or  string | number')}`,
+    "  All declared fields are required (no optional fields).",
+    "",
+    `  ${color.cyan("Interpolation")}`,
+    "  Directions can reference output from prior steps using",
+    `  ${color.green("{{key}}")} placeholders. At runtime, these are replaced`,
+    "  with the actual values the agent provided earlier.",
+    "",
+    `  ${color.cyan("Rules")}`,
+    "  - Output keys must be unique across all steps (no duplicates).",
+    "  - Each step must have at least one output key.",
+    "  - Keys are immutable — once set, they never change.",
+    "",
+    `  ${color.cyan("Example")}`,
+    "",
+    `  ${color.dim("{")}`,
+    `  ${color.dim('  "steps": [')}`,
+    `  ${color.dim("    {")}`,
+    `  ${color.dim('      "label": "goal",')}`,
+    `  ${color.dim('      "directions": "What do you want to accomplish?",')}`,
+    `  ${color.dim('      "output": { "goal": "string" }')}`,
+    `  ${color.dim("    },")}`,
+    `  ${color.dim("    {")}`,
+    `  ${color.dim('      "label": "plan",')}`,
+    `  ${color.dim('      "directions": "Given the goal: {{goal}}\\nMake a plan.",')}`,
+    `  ${color.dim('      "output": { "plan": "Array<{ \\"step\\": string; \\"details\\": string }>" }')}`,
+    `  ${color.dim("    }")}`,
+    `  ${color.dim("  ]")}`,
+    `  ${color.dim("}")}`,
+  ].join("\n");
+}
+
 export function formatError(message: string, configPath: string): string {
   return [
     color.red(`Error: ${message}`),
