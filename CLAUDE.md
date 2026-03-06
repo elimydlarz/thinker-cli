@@ -191,6 +191,7 @@ $ thinker reset prioritise-tasks.json
 
 ## Repo Map
 
+- `examples/` — sample config files for trying out the CLI
 - `src/types.ts` — type definitions: `Config`, `Step`, `Progress`, `SharedSpace`
 - `src/config.ts` — load + validate config JSON files
 - `src/progress.ts` — progress file CRUD; path derived via SHA256 hash of config path
