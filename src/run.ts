@@ -143,6 +143,14 @@ function handleContinue(
     );
   }
 
+  // Validate value types
+  const typeErrors = validateOutput(data, step.output);
+  if (typeErrors.length > 0) {
+    return stepError(
+      `Output type mismatch:\n\n${typeErrors.join("\n")}`
+    );
+  }
+
   // Merge into shared space
   for (const key of expectedKeys) {
     progress.sharedSpace[key] = data[key];
