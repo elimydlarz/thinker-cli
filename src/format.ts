@@ -109,7 +109,7 @@ export function formatDirections(
   const boxReplacements: SharedSpace = {};
   for (const [key, value] of Object.entries(sharedSpace)) {
     const stringVal = typeof value === "string" ? value : JSON.stringify(value, null, 2);
-    boxReplacements[key] = `\n${labeledBox(key, stringVal)}\n`;
+    boxReplacements[key] = labeledBox(key, stringVal);
   }
 
   return interpolate(directions, boxReplacements);
