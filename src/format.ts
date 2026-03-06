@@ -146,7 +146,7 @@ export function formatCompletion(
   parts.push("");
   parts.push(formatStepList(steps, steps.length));
   parts.push("");
-  parts.push("Final output:");
+  parts.push(color.bold("Final output:"));
 
   // Show the last step's output keys
   const lastStep = steps[steps.length - 1];
