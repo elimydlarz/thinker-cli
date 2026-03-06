@@ -5,7 +5,7 @@ An orchestrator that guides you through a multi-step thought process. You receiv
 ## Install
 
 ```
-npm install -g thinker-cli
+npm install -g @susu-eng/thinker-cli
 ```
 
 ## Commands
