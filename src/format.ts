@@ -159,7 +159,7 @@ export function formatCompletion(
 
 export function formatError(message: string, configPath: string): string {
   return [
-    `Error: ${message}`,
+    color.red(`Error: ${message}`),
     "",
     "─".repeat(BOX_WIDTH),
     "",
