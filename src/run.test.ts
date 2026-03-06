@@ -324,12 +324,13 @@ describe("run", () => {
     });
   });
 
-  describe("unknown command", () => {
-    it("shows error and manual", () => {
+  describe("no arguments", () => {
+    it("shows manual without error", () => {
       const result = run([]);
 
-      expect(result.exitCode).toBe(1);
+      expect(result.exitCode).toBe(0);
       expect(result.output).toContain("THINKER");
+      expect(result.output).not.toContain("Error:");
     });
   });
 });
