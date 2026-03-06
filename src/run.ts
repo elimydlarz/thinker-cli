@@ -56,10 +56,24 @@ function handleStart(
 ): RunResult {
   const existing = readProgress(configPath);
   if (existing) {
-    return error(
-      "Process already in progress. Pass output JSON to continue, or reset first.",
-      rawConfigPath
-    );
+    const step = config.steps[existing.currentStepIndex];
+    const parts: string[] = [
+      color.red(
+        "Error: Process already in progress. Pass output JSON to continue, or reset first."
+      ),
+      "",
+      color.dim("─".repeat(40)),
+      "",
+      formatStepList(config.steps, existing.currentStepIndex),
+      "",
+      formatStepBox(existing.currentStepIndex, config.steps.length, step.label),
+      "",
+      formatDirections(step.directions, existing.sharedSpace),
+      "",
+      color.dim("─".repeat(40)),
+      formatCallback(rawConfigPath, step.output),
+    ];
+    return { output: parts.join("\n"), exitCode: 1 };
   }
 
   const progress: Progress = {
