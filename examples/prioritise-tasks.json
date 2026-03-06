@@ -4,7 +4,7 @@
       "label": "gather",
       "directions": "List all open tasks from the project board.",
       "output": {
-        "tasks": "Array<{ id: string; title: string; effort: 'S' | 'M' | 'L' }>"
+        "tasks": "Array<{ id: string; title: string; effort: \"S\" | \"M\" | \"L\" }>"
       }
     },
     {
