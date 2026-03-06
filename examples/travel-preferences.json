@@ -1,0 +1,33 @@
+{
+  "steps": [
+    {
+      "label": "destination",
+      "directions": "Where do you want to go, and what's the vibe — budget-friendly, mid-range, or luxury?",
+      "output": {
+        "destination": "string",
+        "budget": "\"budget-friendly\" | \"mid-range\" | \"luxury\""
+      }
+    },
+    {
+      "label": "interests",
+      "directions": "You're planning a {{budget}} trip to {{destination}}. What kind of experiences are you after? Pick your top interests and rate how important each one is.",
+      "output": {
+        "interests": "Array<{ name: string; priority: \"must-do\" | \"nice-to-have\" }>"
+      }
+    },
+    {
+      "label": "constraints",
+      "directions": "Given your {{budget}} trip to {{destination}} with these interests:\n\n{{interests}}\n\nAre there any constraints the plan should respect? (e.g. dietary needs, accessibility, pace, travel companions, trip length)",
+      "output": {
+        "constraints": "string"
+      }
+    },
+    {
+      "label": "itinerary",
+      "directions": "Build a day-by-day itinerary for a {{budget}} trip to {{destination}}.\n\nInterests:\n\n{{interests}}\n\nConstraints:\n\n{{constraints}}\n\nStructure it as a practical, actionable plan.",
+      "output": {
+        "itinerary": "string"
+      }
+    }
+  ]
+}
