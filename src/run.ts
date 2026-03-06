@@ -123,6 +123,10 @@ function handleContinue(
       "",
       color.dim("─".repeat(40)),
       formatCallback(rawConfigPath, step.output),
+      "",
+      color.dim("─".repeat(40)),
+      "",
+      formatManual(rawConfigPath),
     ];
     return { output: parts.join("\n"), exitCode: 1 };
   };
