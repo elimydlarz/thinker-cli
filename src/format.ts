@@ -78,9 +78,9 @@ export function formatManual(configPath: string): string {
 export function formatStepList(steps: Step[], currentIndex: number): string {
   const lines = steps.map((step, i) => {
     const num = i + 1;
-    if (i < currentIndex) return `  ✓ ${num}. ${step.label}`;
-    if (i === currentIndex) return `  ▶ ${num}. ${step.label}`;
-    return `    ${num}. ${step.label}`;
+    if (i < currentIndex) return color.green(`  ✓ ${num}. ${step.label}`);
+    if (i === currentIndex) return color.blue(`  ▶ ${num}. ${step.label}`);
+    return color.dim(`    ${num}. ${step.label}`);
   });
   return `Steps:\n${lines.join("\n")}`;
 }
