@@ -112,17 +112,6 @@ Rules:
 - No two steps may declare the same output key
 
 The type descriptions in `output` are for the agent's understanding — the CLI only validates key presence, not value types.
-
-## Error handling
-
-The CLI is designed for AI agents, so it fails fast with helpful errors:
-- What went wrong
-- What was expected
-- The exact command to retry
-- The full usage manual (reprinted on every error)
-
-This means agents can self-correct without needing external help.
-
 ## Development
 
 ```
