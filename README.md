@@ -63,10 +63,10 @@ No two steps may declare the same output key.
 
 ## Example
 
-A sample config is included at `examples/prioritise-tasks.json`. Run it:
+A sample config is included at `examples/travel-preferences.json`. Run it:
 
 ```
-thinker examples/prioritise-tasks.json
+thinker examples/travel-preferences.json
 ```
 
 The CLI will show step 1 directions and the exact command to call back with your output. Follow the instructions step by step until completion.
