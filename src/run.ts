@@ -88,7 +88,7 @@ function handleContinue(
 
   const stepError = (message: string): RunResult => {
     const parts: string[] = [
-      formatError(message, rawConfigPath),
+      `Error: ${message}`,
       "",
       "─".repeat(40),
       "",
