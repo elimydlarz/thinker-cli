@@ -88,7 +88,7 @@ function handleStart(
   writeProgress(configPath, progress);
 
   return {
-    output: formatStepOutput(config, progress, rawConfigPath, true),
+    output: formatStepOutput(config, progress, rawConfigPath),
     exitCode: 0,
   };
 }
