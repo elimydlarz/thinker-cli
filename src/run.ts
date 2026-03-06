@@ -147,7 +147,7 @@ function handleContinue(
 
 function handleReset(args: string[]): RunResult {
   if (args.length === 0) {
-    return error("Reset requires a config path.", "thinker reset <config>");
+    return error("Reset requires a config path.", "<config>");
   }
 
   const configPath = resolve(args[0]);
