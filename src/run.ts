@@ -84,41 +84,57 @@ function handleContinue(
     );
   }
 
+  const step = config.steps[progress.currentStepIndex];
+
+  const stepError = (message: string): RunResult => {
+    const parts: string[] = [
+      formatError(message, rawConfigPath),
+      "",
+      "─".repeat(40),
+      "",
+      formatStepList(config.steps, progress.currentStepIndex),
+      "",
+      formatStepBox(progress.currentStepIndex, config.steps.length, step.label),
+      "",
+      formatDirections(step.directions, progress.sharedSpace),
+      "",
+      "─".repeat(40),
+      formatCallback(rawConfigPath, step.output),
+    ];
+    return { output: parts.join("\n"), exitCode: 1 };
+  };
+
   // Parse JSON
   let parsed: unknown;
   try {
     parsed = JSON.parse(jsonArg);
   } catch {
-    return error(
-      `Invalid JSON: could not parse the argument.\n\nReceived: ${jsonArg}`,
-      rawConfigPath
+    return stepError(
+      `Invalid JSON: could not parse the argument.\n\nReceived: ${jsonArg}`
     );
   }
 
   if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
-    return error("Output must be a JSON object.", rawConfigPath);
+    return stepError("Output must be a JSON object.");
   }
 
   const data = parsed as Record<string, unknown>;
-  const step = config.steps[progress.currentStepIndex];
   const expectedKeys = Object.keys(step.output).sort();
   const actualKeys = Object.keys(data).sort();
 
   // Check for missing keys
   const missing = expectedKeys.filter((k) => !actualKeys.includes(k));
   if (missing.length > 0) {
-    return error(
-      `Missing output keys: ${missing.join(", ")}.\n\nExpected keys for step '${step.label}': ${expectedKeys.join(", ")}`,
-      rawConfigPath
+    return stepError(
+      `Missing output keys: ${missing.join(", ")}.\n\nExpected keys for step '${step.label}': ${expectedKeys.join(", ")}`
     );
   }
 
   // Check for extra keys
   const extra = actualKeys.filter((k) => !expectedKeys.includes(k));
   if (extra.length > 0) {
-    return error(
-      `Unexpected output keys: ${extra.join(", ")}.\n\nExpected keys for step '${step.label}': ${expectedKeys.join(", ")}`,
-      rawConfigPath
+    return stepError(
+      `Unexpected output keys: ${extra.join(", ")}.\n\nExpected keys for step '${step.label}': ${expectedKeys.join(", ")}`
     );
   }
 
