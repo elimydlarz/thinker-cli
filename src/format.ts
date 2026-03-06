@@ -160,7 +160,7 @@ export function formatCompletion(
   }
 
   parts.push("");
-  parts.push("(Progress file cleaned up)");
+  parts.push(color.dim("(Progress file cleaned up)"));
 
   return parts.join("\n");
 }
