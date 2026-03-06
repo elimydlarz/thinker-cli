@@ -1,5 +1,4 @@
 import type { Step, SharedSpace } from "./types.js";
-import { interpolate } from "./interpolate.js";
 import { color } from "./color.js";
 
 const BOX_WIDTH = 40;
