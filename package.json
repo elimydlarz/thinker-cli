@@ -3,18 +3,23 @@
   "version": "1.0.0",
   "description": "An orchestrator that guides an AI agent through a multi-step thought process",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "bin": {
     "thinker": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepublishOnly": "pnpm build && pnpm test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.28.0",
   "devDependencies": {
+    "@types/node": "^25.3.3",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   }
