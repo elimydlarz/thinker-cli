@@ -263,6 +263,44 @@ describe("run", () => {
 
         expect(result.output).toContain("THINKER");
       });
+
+      it("repeats step directions on validation error", () => {
+        const configPath = writeConfig(twoStepConfig);
+        run([configPath]);
+
+        const result = run([configPath, '{"wrong": "key"}']);
+
+        expect(result.output).toContain("List tasks.");
+      });
+
+      it("repeats callback instruction on validation error", () => {
+        const configPath = writeConfig(twoStepConfig);
+        run([configPath]);
+
+        const result = run([configPath, '{"wrong": "key"}']);
+
+        expect(result.output).toContain("To continue, run:");
+        expect(result.output).toContain('"tasks": Array<string>');
+      });
+
+      it("shows step list on validation error", () => {
+        const configPath = writeConfig(twoStepConfig);
+        run([configPath]);
+
+        const result = run([configPath, '{"wrong": "key"}']);
+
+        expect(result.output).toMatch(/▶.*1\. gather/);
+      });
+
+      it("repeats step directions on malformed JSON", () => {
+        const configPath = writeConfig(twoStepConfig);
+        run([configPath]);
+
+        const result = run([configPath, "not-json"]);
+
+        expect(result.output).toContain("List tasks.");
+        expect(result.output).toContain("To continue, run:");
+      });
     });
   });
 
