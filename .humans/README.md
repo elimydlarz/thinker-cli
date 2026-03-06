@@ -8,11 +8,13 @@ State is persisted to disk between invocations, so the agent can be stateless. T
 
 ## Installation
 
+Run directly with pnpx (no install needed):
+
 ```
-npm install -g @susu-eng/thinker-cli
+pnpx @susu-eng/thinker-cli <config-path>
 ```
 
-Or with pnpm:
+Or install globally:
 
 ```
 pnpm add -g @susu-eng/thinker-cli
