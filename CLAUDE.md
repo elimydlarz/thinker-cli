@@ -219,9 +219,17 @@ $ thinker reset prioritise-tasks.json
 
 ## Repo Map
 
-- `src/` — source code and tests (colocated `*.test.ts` files)
-- `vitest.config.ts` — test config (verbose/tree-style reporter)
-- `package.json` — project manifest; `pnpm test` runs `vitest run`
+- `src/types.ts` — type definitions: `Config`, `Step`, `Progress`, `SharedSpace`
+- `src/config.ts` — load + validate config JSON files
+- `src/progress.ts` — progress file CRUD; path derived via SHA256 hash of config path
+- `src/interpolate.ts` — pure `{{key}}` placeholder replacement
+- `src/format.ts` — all CLI output rendering (step list, boxes, manual, errors, completion)
+- `src/run.ts` — core orchestration: parse args, dispatch start/continue/reset, wire modules
+- `src/cli.ts` — thin entry point: `process.argv` → `run()` → stdout + exit code
+- `src/*.test.ts` — colocated tests for each module
+- `vitest.config.ts` — test config (verbose reporter)
+- `tsconfig.json` — TypeScript config (ES2022, Node16, strict)
+- `package.json` — project manifest; `pnpm test` runs tests, `pnpm build` compiles to `dist/`
 
 ## Working in This Repo
 
