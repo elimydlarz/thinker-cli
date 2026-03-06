@@ -1,5 +1,5 @@
 {
-  "name": "thinker-cli",
+  "name": "@susu-eng/thinker-cli",
   "version": "1.0.0",
   "description": "An orchestrator that guides an AI agent through a multi-step thought process",
   "type": "module",
@@ -14,9 +14,22 @@
     "test": "vitest run",
     "prepublishOnly": "pnpm build && pnpm test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "ai",
+    "agent",
+    "cli",
+    "orchestrator",
+    "thought-process",
+    "multi-step",
+    "reasoning"
+  ],
+  "author": "Eli Mydlarz",
+  "license": "CC-BY-ND-4.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elimydlarz/thinker-cli.git"
+  },
+  "homepage": "https://github.com/elimydlarz/thinker-cli",
   "packageManager": "pnpm@10.28.0",
   "devDependencies": {
     "@types/node": "^25.3.3",
