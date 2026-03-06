@@ -163,7 +163,7 @@ export function formatError(message: string, configPath: string): string {
   return [
     color.red(`Error: ${message}`),
     "",
-    "─".repeat(BOX_WIDTH),
+    color.dim("─".repeat(BOX_WIDTH)),
     "",
     formatManual(configPath),
   ].join("\n");
