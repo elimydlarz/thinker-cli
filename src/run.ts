@@ -19,7 +19,7 @@ interface RunResult {
 
 export function run(args: string[]): RunResult {
   if (args.length === 0) {
-    return error("No arguments provided.", "thinker <config>");
+    return error("No arguments provided.", "<config>");
   }
 
   // Reset command
