@@ -111,7 +111,12 @@ export function formatCallback(
   output: Record<string, string>
 ): string {
   const entries = Object.entries(output)
-    .map(([key, type]) => `    "${key}": ${type.replace(/'/g, '"')}`)
+    .map(([key, type]) => {
+      const quoted = type
+        .replace(/'/g, '"')
+        .replace(/([{;])\s*(\w+)\s*:/g, '$1 "$2":');
+      return `    "${key}": ${quoted}`;
+    })
     .join(",\n");
 
   return [
