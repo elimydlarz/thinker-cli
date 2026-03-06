@@ -4,8 +4,16 @@ An orchestrator that guides you through a multi-step thought process. You receiv
 
 ## Install
 
+Run directly with pnpx (no install needed):
+
 ```
-npm install -g @susu-eng/thinker-cli
+pnpx @susu-eng/thinker-cli <config-path>
+```
+
+Or install globally:
+
+```
+pnpm add -g @susu-eng/thinker-cli
 ```
 
 ## Commands
@@ -13,19 +21,19 @@ npm install -g @susu-eng/thinker-cli
 Start a process:
 
 ```
-thinker <config-path>
+pnpx @susu-eng/thinker-cli <config-path>
 ```
 
 Continue with output for the current step:
 
 ```
-thinker <config-path> '{"key": value}'
+pnpx @susu-eng/thinker-cli <config-path> '{"key": value}'
 ```
 
 Reset (discard progress, start over):
 
 ```
-thinker reset <config-path>
+pnpx @susu-eng/thinker-cli reset <config-path>
 ```
 
 ## How it works
