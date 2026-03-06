@@ -123,11 +123,11 @@ export function formatCallback(
     .join(",\n");
 
   return [
-    "To continue, run:",
+    color.dim("To continue, run:"),
     "",
-    `  thinker ${configPath} '{`,
+    `  ${color.green("thinker")} ${configPath} '${color.dim("{")}`,
     entries,
-    `  }'`,
+    `  ${color.dim("}")}'`,
   ].join("\n");
 }
 
