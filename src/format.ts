@@ -90,7 +90,7 @@ export function formatStepBox(
   totalSteps: number,
   label: string
 ): string {
-  return headerBox(`STEP ${stepIndex + 1}/${totalSteps} — ${label}`);
+  return headerBox(color.blue(`STEP ${stepIndex + 1}/${totalSteps} — ${label}`));
 }
 
 export function formatDirections(
