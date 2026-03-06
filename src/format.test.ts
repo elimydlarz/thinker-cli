@@ -35,6 +35,27 @@ describe("format", () => {
 
       expect(manual).toContain("thinker reset my-config.json");
     });
+
+    it("explains what thinker is", () => {
+      const manual = formatManual("my-config.json");
+
+      expect(manual).toMatch(/thought process/i);
+      expect(manual).toMatch(/step/i);
+    });
+
+    it("explains the workflow", () => {
+      const manual = formatManual("my-config.json");
+
+      expect(manual).toContain("directions");
+      expect(manual).toContain("JSON");
+    });
+
+    it("explains the output contract", () => {
+      const manual = formatManual("my-config.json");
+
+      expect(manual).toMatch(/keys/i);
+      expect(manual).toMatch(/exact/i);
+    });
   });
 
   describe("formatStepList", () => {
