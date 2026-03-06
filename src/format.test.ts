@@ -135,6 +135,19 @@ describe("format", () => {
       expect(cb).toContain('"a"');
       expect(cb).toContain('"b"');
     });
+
+    describe("when type descriptions contain single quotes", () => {
+      it("replaces them with double quotes to avoid breaking the outer shell string", () => {
+        const cb = formatCallback("c.json", {
+          tasks: "Array<{ effort: 'S' | 'M' | 'L' }>",
+        });
+
+        expect(cb).not.toContain("'S'");
+        expect(cb).not.toContain("'M'");
+        expect(cb).not.toContain("'L'");
+        expect(cb).toContain('"S" | "M" | "L"');
+      });
+    });
   });
 
   describe("formatCompletion", () => {
