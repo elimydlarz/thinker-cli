@@ -92,7 +92,7 @@ function handleContinue(
 
   const stepError = (message: string): RunResult => {
     const parts: string[] = [
-      `Error: ${message}`,
+      color.red(`Error: ${message}`),
       "",
       "─".repeat(40),
       "",
