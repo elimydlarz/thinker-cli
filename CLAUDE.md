@@ -191,6 +191,8 @@ $ thinker reset prioritise-tasks.json
 
 ## Repo Map
 
+- `README.md` — agent-facing documentation (installation, commands, config format)
+- `.humans/README.md` — human-facing documentation (same content, narrative style)
 - `examples/` — sample config files for trying out the CLI
 - `src/types.ts` — type definitions: `Config`, `Step`, `Progress`, `SharedSpace`
 - `src/config.ts` — load + validate config JSON files
