@@ -213,18 +213,10 @@ function handleReset(args: string[]): RunResult {
 function formatStepOutput(
   config: Config,
   progress: Progress,
-  rawConfigPath: string,
-  showManual: boolean
+  rawConfigPath: string
 ): string {
   const step = config.steps[progress.currentStepIndex];
   const parts: string[] = [];
-
-  if (showManual) {
-    parts.push(formatManual(rawConfigPath));
-    parts.push("");
-    parts.push(color.dim("─".repeat(40)));
-    parts.push("");
-  }
 
   parts.push(formatStepList(config.steps, progress.currentStepIndex));
   parts.push("");
