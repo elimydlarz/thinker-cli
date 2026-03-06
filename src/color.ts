@@ -9,6 +9,8 @@ export const color = {
   green: (text: string) => wrap("32", text),
   red: (text: string) => wrap("31", text),
   blue: (text: string) => wrap("34", text),
+  cyan: (text: string) => wrap("36", text),
+  yellow: (text: string) => wrap("33", text),
   dim: (text: string) => wrap("2", text),
   bold: (text: string) => wrap("1", text),
 };
