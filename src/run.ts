@@ -10,6 +10,7 @@ import {
   formatCompletion,
   formatError,
 } from "./format.js";
+import { color } from "./color.js";
 import type { Config, Progress } from "./types.js";
 
 interface RunResult {
