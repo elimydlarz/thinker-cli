@@ -59,13 +59,12 @@ describe("run", () => {
       expect(readProgress(configPath)).not.toBeNull();
     });
 
-    it("shows the CLI manual on first invocation", () => {
+    it("does not show the CLI manual on first invocation", () => {
       const configPath = writeConfig(twoStepConfig);
 
       const result = run([configPath]);
 
-      expect(result.output).toContain("THINKER");
-      expect(result.output).toContain("thinker");
+      expect(result.output).not.toContain("THINKER");
     });
 
     it("shows the step list with step 1 highlighted", () => {
