@@ -46,7 +46,7 @@ This is inspired by an internal library that recursively iterates through precon
 - **output-format** — CLI output is nicely formatted text. Shows the step list (completed/current/future), the current step's directions with interpolated values visually demarcated, and the exact callback command with the required JSON shape.
 - **step-isolation** — show all step labels (completed marked, current highlighted, future listed). Show the current step's directions + output shape + interpolated prior values. Never reveal other steps' directions or future output shapes.
 - **agent-first-errors** — validate all input strictly (JSON parsing, expected output keys, config structure). On failure: explain what went wrong, show what was expected, tell the agent exactly how to retry, and reprint the CLI user manual.
-- **agent-first-manual** — a CLI usage guide printed at step 0 and on errors. Covers invocation syntax, how to pass args, how to reset. This is about how to use the tool — it does not reveal thought process content.
+- **agent-first-manual** — a full orientation guide printed at step 0 and on every error. Explains what thinker is (a guided thought process CLI), the workflow (directions → work → callback → next step), the output contract (exact keys, no extra, no missing), and all commands (start, continue, reset). Designed so an agent gets complete context the moment it first touches the tool or hits any problem.
 
 ## Usage Example
 
