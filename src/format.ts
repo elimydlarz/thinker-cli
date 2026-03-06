@@ -39,10 +39,11 @@ function labeledBox(label: string, content: string): string {
 function headerBox(title: string): string {
   const inner = BOX_WIDTH - 2;
   const padded = `  ${title}`;
+  const pad = inner - visibleLength(padded);
   return [
-    `╭${"─".repeat(inner)}╮`,
-    `│${padded.padEnd(inner)}│`,
-    `╰${"─".repeat(inner)}╯`,
+    color.dim(`╭${"─".repeat(inner)}╮`),
+    color.dim("│") + padded + " ".repeat(Math.max(0, pad)) + color.dim("│"),
+    color.dim(`╰${"─".repeat(inner)}╯`),
   ].join("\n");
 }
 
