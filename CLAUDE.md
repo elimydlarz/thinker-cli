@@ -50,38 +50,10 @@ This is inspired by an internal library that recursively iterates through precon
 
 ## Usage Example
 
-**Config** — `prioritise-tasks.json`:
-```json
-{
-  "steps": [
-    {
-      "label": "gather",
-      "directions": "List all open tasks from the project board.",
-      "output": {
-        "tasks": "Array<{ id: string; title: string; effort: 'S' | 'M' | 'L' }>"
-      }
-    },
-    {
-      "label": "rank",
-      "directions": "Here are the open tasks:\n\n{{tasks}}\n\nRank them by impact-to-effort ratio, highest first.",
-      "output": {
-        "ranked": "Array<{ id: string; title: string; score: number; reasoning: string }>"
-      }
-    },
-    {
-      "label": "plan",
-      "directions": "Here is the ranked task list:\n\n{{ranked}}\n\nPick the top 3 and write a short action plan for each.",
-      "output": {
-        "actionPlan": "string"
-      }
-    }
-  ]
-}
-```
+See `examples/prioritise-tasks.json` for a ready-to-run sample config. Try it:
 
-**Invocation 1** — agent starts the process:
 ```
-$ thinker prioritise-tasks.json
+$ thinker examples/prioritise-tasks.json
 ```
 ```
 Steps:
