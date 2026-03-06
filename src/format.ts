@@ -105,14 +105,33 @@ export function formatDirections(
   directions: string,
   sharedSpace: SharedSpace
 ): string {
-  // Build replacements where each value is rendered as a labeled box
-  const boxReplacements: SharedSpace = {};
-  for (const [key, value] of Object.entries(sharedSpace)) {
-    const stringVal = typeof value === "string" ? value : JSON.stringify(value, null, 2);
-    boxReplacements[key] = labeledBox(key, stringVal);
+  // Split on {{key}} placeholders and interleave text with labeled boxes.
+  // This avoids inserting multi-line boxes inline via string replacement.
+  const parts: string[] = [];
+  const regex = /\{\{(\w+)\}\}/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(directions)) !== null) {
+    const textBefore = directions.slice(lastIndex, match.index).trim();
+    if (textBefore) parts.push(textBefore);
+
+    const key = match[1];
+    if (key in sharedSpace) {
+      const val = sharedSpace[key];
+      const stringVal = typeof val === "string" ? val : JSON.stringify(val, null, 2);
+      parts.push(labeledBox(key, stringVal));
+    } else {
+      parts.push(match[0]); // leave unresolved placeholder as-is
+    }
+
+    lastIndex = regex.lastIndex;
   }
 
-  return interpolate(directions, boxReplacements);
+  const textAfter = directions.slice(lastIndex).trim();
+  if (textAfter) parts.push(textAfter);
+
+  return parts.join("\n");
 }
 
 export function formatCallback(
