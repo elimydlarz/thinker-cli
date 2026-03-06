@@ -198,6 +198,7 @@ $ thinker reset prioritise-tasks.json
 - `src/types.ts` — type definitions: `Config`, `Step`, `Progress`, `SharedSpace`
 - `src/config.ts` — load + validate config JSON files
 - `src/progress.ts` — progress file CRUD; path derived via SHA256 hash of config path
+- `src/validate.ts` — type expression parser and runtime type validator for step output
 - `src/interpolate.ts` — pure `{{key}}` placeholder replacement
 - `src/color.ts` — ANSI color helpers (green/red/blue/dim/bold); respects `NO_COLOR` env var
 - `src/format.ts` — all CLI output rendering (step list, boxes, manual, errors, completion)
