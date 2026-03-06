@@ -30,9 +30,9 @@ function labeledBox(label: string, content: string): string {
     }
   }
 
-  const top = `┌ ${label} ${"─".repeat(Math.max(0, inner - label.length - 1))}┐`;
-  const bottom = `└${"─".repeat(inner + 2)}┘`;
-  const body = lines.map((l) => `│ ${l.padEnd(inner)} │`).join("\n");
+  const top = color.dim(`┌ ${label} ${"─".repeat(Math.max(0, inner - label.length - 1))}┐`);
+  const bottom = color.dim(`└${"─".repeat(inner + 2)}┘`);
+  const body = lines.map((l) => `${color.dim("│")} ${l.padEnd(inner)} ${color.dim("│")}`).join("\n");
   return `${top}\n${body}\n${bottom}`;
 }
 
