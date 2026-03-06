@@ -47,7 +47,7 @@ Create a JSON file describing your thought process. Each step has a name, direct
 
 Notice `{{tasks}}` in step 2's directions — that gets replaced with the actual output from step 1.
 
-A sample config is included at `examples/prioritise-tasks.json`.
+A sample config is included at `examples/travel-preferences.json`.
 
 ### 2. Start the process
 
