@@ -345,4 +345,22 @@ describe("run", () => {
       expect(result.output).not.toContain("Error:");
     });
   });
+
+  describe("config-help — thinker config-help", () => {
+    it("shows config writing instructions", () => {
+      const result = run(["config-help"]);
+
+      expect(result.exitCode).toBe(0);
+      expect(result.output).toContain("steps");
+      expect(result.output).toContain("label");
+      expect(result.output).toContain("directions");
+      expect(result.output).toContain("output");
+    });
+
+    it("does not show the standard manual", () => {
+      const result = run(["config-help"]);
+
+      expect(result.output).not.toContain("THINKER");
+    });
+  });
 });
