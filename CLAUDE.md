@@ -39,6 +39,7 @@ This is inspired by an internal library that recursively iterates through precon
 - **config-format** — JSON file with an ordered list of steps. Each step has `label` (string), `directions` (string), and `output` (map of key names to TypeScript-style type descriptions, e.g. `{ "tasks": "Array<{ id: string; title: string }>" }`).
 - **config-validation** — at load time, reject configs where two steps declare the same output key. Variables are immutable — no collisions allowed.
 - **progress-tracking** — progress is saved to disk, keyed to the config file path. Stores current step index and the shared space (all accumulated output key-value pairs).
+- **output-type-validation** — when the agent provides output JSON, validate that values match the declared TypeScript-style types. Supports primitives (`string`, `number`, `boolean`), `Array<T>`, object types (`{ key: type; ... }`), string literal unions (`"A" | "B"`), and type unions (`string | number`). Unparseable type expressions are accepted without validation (graceful fallback). Errors identify the exact path (e.g. `tasks[1].id`) and the type mismatch.
 - **directions-interpolation** — directions can contain `{{key}}` placeholders. The CLI replaces them with the corresponding value from the shared space before displaying.
 
 ### Cross-functional
