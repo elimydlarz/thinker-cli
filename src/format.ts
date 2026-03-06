@@ -79,6 +79,9 @@ export function formatManual(configPath: string): string {
     "",
     `  ${color.yellow(`thinker reset ${configPath}`)}`,
     color.dim("    Discard progress and start over."),
+    "",
+    `  ${color.green("thinker config-help")}`,
+    color.dim("    Show how to write config files."),
   ].join("\n");
 }
 
