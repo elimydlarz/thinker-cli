@@ -148,6 +148,18 @@ describe("format", () => {
         expect(cb).toContain('"S" | "M" | "L"');
       });
     });
+
+    describe("when type descriptions contain object keys", () => {
+      it("double-quotes unquoted keys for consistency with JSON notation", () => {
+        const cb = formatCallback("c.json", {
+          tasks: "Array<{ id: string; title: string; effort: string }>",
+        });
+
+        expect(cb).toContain('"id":');
+        expect(cb).toContain('"title":');
+        expect(cb).toContain('"effort":');
+      });
+    });
   });
 
   describe("formatCompletion", () => {
