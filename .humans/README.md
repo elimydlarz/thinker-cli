@@ -9,13 +9,13 @@ State is persisted to disk between invocations, so the agent can be stateless. T
 ## Installation
 
 ```
-npm install -g thinker-cli
+npm install -g @susu-eng/thinker-cli
 ```
 
 Or with pnpm:
 
 ```
-pnpm add -g thinker-cli
+pnpm add -g @susu-eng/thinker-cli
 ```
 
 ## Quick start
