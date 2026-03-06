@@ -187,7 +187,7 @@ function handleContinue(
   writeProgress(configPath, progress);
 
   return {
-    output: formatStepOutput(config, progress, rawConfigPath, false),
+    output: formatStepOutput(config, progress, rawConfigPath),
     exitCode: 0,
   };
 }
