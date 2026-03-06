@@ -28,6 +28,11 @@ export function run(args: string[]): RunResult {
     };
   }
 
+  // Config help command
+  if (args[0] === "config-help") {
+    return { output: formatConfigHelp(), exitCode: 0 };
+  }
+
   // Reset command
   if (args[0] === "reset") {
     return handleReset(args.slice(1));
