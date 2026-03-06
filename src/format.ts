@@ -111,7 +111,7 @@ export function formatCallback(
   output: Record<string, string>
 ): string {
   const entries = Object.entries(output)
-    .map(([key, type]) => `    "${key}": ${type}`)
+    .map(([key, type]) => `    "${key}": ${type.replace(/'/g, '"')}`)
     .join(",\n");
 
   return [
