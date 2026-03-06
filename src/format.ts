@@ -134,7 +134,7 @@ export function formatCompletion(
   sharedSpace: SharedSpace
 ): string {
   const parts: string[] = [];
-  parts.push(headerBox("COMPLETE"));
+  parts.push(headerBox(color.green("COMPLETE")));
   parts.push("");
   parts.push(formatStepList(steps, steps.length));
   parts.push("");
