@@ -36,6 +36,7 @@ This is inspired by an internal library that recursively iterates through precon
 - **continue** — `thinker <config-path> '<json>'` advances the process. The JSON must be an object whose keys match the current step's declared `output`, and whose values match the declared types. The CLI merges those keys into the shared space, advances to the next step, and emits its directions.
 - **complete** — when all steps are done, emit the final result and clean up the progress file.
 - **reset** — `thinker reset <config-path>` deletes the progress file, allowing a fresh start.
+- **config-help** — `thinker config-help` prints a standalone guide on how to write config files: structure (steps array with label/directions/output), supported types, interpolation syntax, uniqueness rules, and an example config.
 - **config-format** — JSON file with an ordered list of steps. Each step has `label` (string), `directions` (string), and `output` (map of key names to TypeScript-style type descriptions, e.g. `{ "tasks": "Array<{ id: string; title: string }>" }`).
 - **config-validation** — at load time, reject configs where two steps declare the same output key. Variables are immutable — no collisions allowed.
 - **progress-tracking** — progress is saved to disk, keyed to the config file path. Stores current step index and the shared space (all accumulated output key-value pairs).
