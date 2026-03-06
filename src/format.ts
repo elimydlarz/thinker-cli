@@ -4,6 +4,11 @@ import { color } from "./color.js";
 
 const BOX_WIDTH = 40;
 
+const ANSI_RE = /\x1b\[\d+m/g;
+function visibleLength(s: string): number {
+  return s.replace(ANSI_RE, "").length;
+}
+
 function labeledBox(label: string, content: string): string {
   const inner = BOX_WIDTH - 4;
   const lines: string[] = [];
