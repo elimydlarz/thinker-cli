@@ -3,6 +3,7 @@ import { loadConfig } from "./config.js";
 import { readProgress, writeProgress, deleteProgress } from "./progress.js";
 import {
   formatManual,
+  formatConfigHelp,
   formatStepList,
   formatStepBox,
   formatDirections,
