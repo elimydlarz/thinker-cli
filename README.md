@@ -70,12 +70,3 @@ thinker examples/prioritise-tasks.json
 ```
 
 The CLI will show step 1 directions and the exact command to call back with your output. Follow the instructions step by step until completion.
-
-## Error handling
-
-If you pass invalid JSON, wrong keys, or call at the wrong time, the CLI will tell you:
-- What went wrong
-- What it expected
-- The exact command to retry
-
-It reprints the usage manual on every error.
