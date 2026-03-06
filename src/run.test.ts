@@ -255,13 +255,13 @@ describe("run", () => {
         expect(result.output).toContain("tasks");
       });
 
-      it("reprints the CLI manual on error", () => {
+      it("does not show the CLI manual on step validation error", () => {
         const configPath = writeConfig(twoStepConfig);
         run([configPath]);
 
         const result = run([configPath, '{"wrong": "key"}']);
 
-        expect(result.output).toContain("THINKER");
+        expect(result.output).not.toContain("THINKER");
       });
 
       it("repeats step directions on validation error", () => {
