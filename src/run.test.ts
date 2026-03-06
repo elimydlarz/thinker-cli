@@ -64,7 +64,7 @@ describe("run", () => {
 
       const result = run([configPath]);
 
-      expect(result.output).toContain("Usage:");
+      expect(result.output).toContain("THINKER");
       expect(result.output).toContain("thinker");
     });
 
@@ -261,7 +261,7 @@ describe("run", () => {
 
         const result = run([configPath, '{"wrong": "key"}']);
 
-        expect(result.output).toContain("Usage:");
+        expect(result.output).toContain("THINKER");
       });
     });
   });
@@ -291,7 +291,7 @@ describe("run", () => {
       const result = run([]);
 
       expect(result.exitCode).toBe(1);
-      expect(result.output).toContain("Usage:");
+      expect(result.output).toContain("THINKER");
     });
   });
 });
