@@ -221,6 +221,16 @@ describe("run", () => {
         expect(result.output).toContain("extra");
       });
 
+      it("fails if a value does not match the declared type", () => {
+        const configPath = writeConfig(twoStepConfig);
+        run([configPath]);
+
+        const result = run([configPath, '{"tasks": "not an array"}']);
+
+        expect(result.exitCode).toBe(1);
+        expect(result.output).toContain("expected array");
+      });
+
       it("fails if JSON is missing keys", () => {
         const configPath = writeConfig(threeStepConfig);
         // Use a step with multiple output keys by creating a custom config
