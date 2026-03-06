@@ -33,7 +33,7 @@ This is inspired by an internal library that recursively iterates through precon
 ### Functional
 
 - **start** — `thinker <config-path>` with no args starts the process at step 0. Fails if a progress file already exists (agent must reset or continue with args).
-- **continue** — `thinker <config-path> '<json>'` advances the process. The JSON must be an object whose keys match the current step's declared `output`. The CLI merges those keys into the shared space, advances to the next step, and emits its directions.
+- **continue** — `thinker <config-path> '<json>'` advances the process. The JSON must be an object whose keys match the current step's declared `output`, and whose values match the declared types. The CLI merges those keys into the shared space, advances to the next step, and emits its directions.
 - **complete** — when all steps are done, emit the final result and clean up the progress file.
 - **reset** — `thinker reset <config-path>` deletes the progress file, allowing a fresh start.
 - **config-format** — JSON file with an ordered list of steps. Each step has `label` (string), `directions` (string), and `output` (map of key names to TypeScript-style type descriptions, e.g. `{ "tasks": "Array<{ id: string; title: string }>" }`).
