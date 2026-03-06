@@ -71,7 +71,7 @@ List all open tasks from the project board.
 To continue, run:
 
   thinker prioritise-tasks.json '{
-    "tasks": Array<{ id: string; title: string; effort: 'S' | 'M' | 'L' }>
+    "tasks": Array<{ id: string; title: string; effort: "S" | "M" | "L" }>
   }'
 ```
 
