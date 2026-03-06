@@ -94,7 +94,7 @@ function handleContinue(
     const parts: string[] = [
       color.red(`Error: ${message}`),
       "",
-      "─".repeat(40),
+      color.dim("─".repeat(40)),
       "",
       formatStepList(config.steps, progress.currentStepIndex),
       "",
@@ -102,7 +102,7 @@ function handleContinue(
       "",
       formatDirections(step.directions, progress.sharedSpace),
       "",
-      "─".repeat(40),
+      color.dim("─".repeat(40)),
       formatCallback(rawConfigPath, step.output),
     ];
     return { output: parts.join("\n"), exitCode: 1 };
@@ -191,7 +191,7 @@ function formatStepOutput(
   if (showManual) {
     parts.push(formatManual(rawConfigPath));
     parts.push("");
-    parts.push("─".repeat(40));
+    parts.push(color.dim("─".repeat(40)));
     parts.push("");
   }
 
@@ -207,7 +207,7 @@ function formatStepOutput(
   parts.push("");
   parts.push(formatDirections(step.directions, progress.sharedSpace));
   parts.push("");
-  parts.push("─".repeat(40));
+  parts.push(color.dim("─".repeat(40)));
   parts.push(formatCallback(rawConfigPath, step.output));
 
   return parts.join("\n");
