@@ -94,6 +94,9 @@ describe("run", () => {
 
       expect(result.exitCode).toBe(1);
       expect(result.output).toContain("already in progress");
+      expect(result.output).toContain("STEP 1/");
+      expect(result.output).toContain(twoStepConfig.steps[0].directions);
+      expect(result.output).toContain("THINKER");
     });
 
     it("fails if config file does not exist", () => {
