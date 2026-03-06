@@ -51,110 +51,176 @@ This is inspired by an internal library that recursively iterates through precon
 
 ## Usage Example
 
-See `examples/prioritise-tasks.json` for a ready-to-run sample config. Try it:
+See `examples/travel-preferences.json` for a ready-to-run sample config. Try it:
 
 ```
-$ thinker examples/prioritise-tasks.json
+$ thinker examples/travel-preferences.json
 ```
 ```
 Steps:
-  ▶ 1. gather
-    2. rank
-    3. plan
+  ▶ 1. destination
+    2. interests
+    3. constraints
+    4. itinerary
 
 ╭──────────────────────────────────────╮
-│  STEP 1/3 — gather                   │
+│  STEP 1/4 — destination              │
 ╰──────────────────────────────────────╯
 
-List all open tasks from the project board.
+Where do you want to go, and what's the vibe
+— budget-friendly, mid-range, or luxury?
 
 ────────────────────────────────────────
 To continue, run:
 
-  thinker prioritise-tasks.json '{
-    "tasks": Array<{ id: string; title: string; effort: "S" | "M" | "L" }>
+  thinker travel-preferences.json '{
+    "destination": string,
+    "budget": "budget-friendly" | "mid-range" | "luxury"
   }'
 ```
 
-The agent reads the board, reasons, and calls back:
+The agent picks a destination and calls back:
 ```
-$ thinker prioritise-tasks.json '{ "tasks": [{"id":"1","title":"Fix login bug","effort":"S"},{"id":"2","title":"Redesign dashboard","effort":"L"},{"id":"3","title":"Add CSV export","effort":"M"}] }'
+$ thinker travel-preferences.json '{ "destination": "Japan", "budget": "mid-range" }'
 ```
 
-**Invocation 2** — CLI merges `tasks` into shared space, shows next step with it interpolated:
+**Invocation 2** — CLI merges `destination` and `budget` into shared space, shows next step with them interpolated:
 ```
 Steps:
-  ✓ 1. gather
-  ▶ 2. rank
-    3. plan
+  ✓ 1. destination
+  ▶ 2. interests
+    3. constraints
+    4. itinerary
 
 ╭──────────────────────────────────────╮
-│  STEP 2/3 — rank                     │
+│  STEP 2/4 — interests                │
 ╰──────────────────────────────────────╯
 
-Here are the open tasks:
+You're planning a
+┌ budget ──────────────────────────────┐
+│ mid-range                            │
+└──────────────────────────────────────┘
+trip to
+┌ destination ─────────────────────────┐
+│ Japan                                │
+└──────────────────────────────────────┘
+. What kind of experiences are you
+after? Pick your top interests and rate
+how important each one is.
 
-┌ tasks ───────────────────────────────┐
-│ [{"id":"1","title":"Fix login bug",  │
-│   "effort":"S"},                     │
-│  {"id":"2","title":"Redesign         │
-│   dashboard","effort":"L"},          │
-│  {"id":"3","title":"Add CSV export", │
-│   "effort":"M"}]                     │
+────────────────────────────────────────
+To continue, run:
+
+  thinker travel-preferences.json '{
+    "interests": Array<{ "name": string; "priority": "must-do" | "nice-to-have" }>
+  }'
+```
+
+**Invocation 3** — agent provides interests, CLI shows constraints step with all prior values interpolated:
+```
+$ thinker travel-preferences.json '{ "interests": [{"name":"street food","priority":"must-do"},{"name":"temples","priority":"must-do"},{"name":"hiking","priority":"nice-to-have"}] }'
+```
+```
+Steps:
+  ✓ 1. destination
+  ✓ 2. interests
+  ▶ 3. constraints
+    4. itinerary
+
+╭──────────────────────────────────────╮
+│  STEP 3/4 — constraints              │
+╰──────────────────────────────────────╯
+
+Given your
+┌ budget ──────────────────────────────┐
+│ mid-range                            │
+└──────────────────────────────────────┘
+trip to
+┌ destination ─────────────────────────┐
+│ Japan                                │
+└──────────────────────────────────────┘
+with these interests:
+
+┌ interests ───────────────────────────┐
+│ [{"name":"street food",              │
+│   "priority":"must-do"},             │
+│  {"name":"temples",                  │
+│   "priority":"must-do"},             │
+│  {"name":"hiking",                   │
+│   "priority":"nice-to-have"}]        │
 └──────────────────────────────────────┘
 
-Rank them by impact-to-effort ratio, highest first.
+Are there any constraints the plan
+should respect? (e.g. dietary needs,
+accessibility, pace, travel companions,
+trip length)
 
 ────────────────────────────────────────
 To continue, run:
 
-  thinker prioritise-tasks.json '{
-    "ranked": Array<{ id: string; title: string; score: number; reasoning: string }>
+  thinker travel-preferences.json '{
+    "constraints": string
   }'
 ```
 
-**Invocation 3** — CLI merges `ranked` into shared space, shows final step:
+**Invocation 4** — agent provides constraints, CLI shows final step with everything interpolated:
 ```
-$ thinker prioritise-tasks.json '{ "ranked": [{"id":"1","title":"Fix login bug","score":9,"reasoning":"High impact, low effort"},{"id":"3","title":"Add CSV export","score":5,"reasoning":"Medium impact and effort"},{"id":"2","title":"Redesign dashboard","score":2,"reasoning":"High impact but very high effort"}] }'
+$ thinker travel-preferences.json '{ "constraints": "Vegetarian. 7 days. Moderate pace — no more than 2 major activities per day." }'
 ```
 ```
 Steps:
-  ✓ 1. gather
-  ✓ 2. rank
-  ▶ 3. plan
+  ✓ 1. destination
+  ✓ 2. interests
+  ✓ 3. constraints
+  ▶ 4. itinerary
 
 ╭──────────────────────────────────────╮
-│  STEP 3/3 — plan                     │
+│  STEP 4/4 — itinerary                │
 ╰──────────────────────────────────────╯
 
-Here is the ranked task list:
+Build a day-by-day itinerary for a
+┌ budget ──────────────────────────────┐
+│ mid-range                            │
+└──────────────────────────────────────┘
+trip to
+┌ destination ─────────────────────────┐
+│ Japan                                │
+└──────────────────────────────────────┘
+.
 
-┌ ranked ──────────────────────────────┐
-│ [{"id":"1","title":"Fix login bug",  │
-│   "score":9,"reasoning":"High        │
-│   impact, low effort"},              │
-│  {"id":"3","title":"Add CSV export", │
-│   "score":5,"reasoning":"Medium      │
-│   impact and effort"},               │
-│  {"id":"2","title":"Redesign         │
-│   dashboard","score":2,              │
-│   "reasoning":"High impact but very  │
-│   high effort"}]                     │
+Interests:
+
+┌ interests ───────────────────────────┐
+│ [{"name":"street food",              │
+│   "priority":"must-do"},             │
+│  {"name":"temples",                  │
+│   "priority":"must-do"},             │
+│  {"name":"hiking",                   │
+│   "priority":"nice-to-have"}]        │
 └──────────────────────────────────────┘
 
-Pick the top 3 and write a short action plan for each.
+Constraints:
+
+┌ constraints ─────────────────────────┐
+│ Vegetarian. 7 days. Moderate pace —  │
+│ no more than 2 major activities per  │
+│ day.                                 │
+└──────────────────────────────────────┘
+
+Structure it as a practical, actionable
+plan.
 
 ────────────────────────────────────────
 To continue, run:
 
-  thinker prioritise-tasks.json '{
-    "actionPlan": string
+  thinker travel-preferences.json '{
+    "itinerary": string
   }'
 ```
 
-**Invocation 4** — agent provides the final output, process completes:
+**Invocation 5** — agent provides the itinerary, process completes:
 ```
-$ thinker prioritise-tasks.json '{ "actionPlan": "## Action Plan\n\n1. **Fix login bug** — Reproduce with test account, patch session handler, add regression test.\n2. **Add CSV export** — Add export button to list views, stream rows to avoid memory issues.\n3. **Redesign dashboard** — Start with wireframes, get stakeholder sign-off before dev." }'
+$ thinker travel-preferences.json '{ "itinerary": "## 7-Day Japan Itinerary\n\nDay 1 — Tokyo: Arrive, explore Senso-ji temple, evening street food tour in Asakusa.\nDay 2 — Tokyo: Meiji Shrine in the morning, vegetarian ramen in Shinjuku.\nDay 3 — Hakone: Day trip, hiking the Old Tokaido Road, lake cruise.\nDay 4 — Kyoto: Fushimi Inari in the morning, Nishiki Market for street food.\nDay 5 — Kyoto: Kinkaku-ji, afternoon at Arashiyama bamboo grove.\nDay 6 — Nara: Todai-ji temple, deer park, vegetarian shojin ryori lunch.\nDay 7 — Osaka: Dotonbori street food, Osaka Castle, depart." }'
 ```
 ```
 ╭──────────────────────────────────────╮
@@ -162,24 +228,34 @@ $ thinker prioritise-tasks.json '{ "actionPlan": "## Action Plan\n\n1. **Fix log
 ╰──────────────────────────────────────╯
 
 Steps:
-  ✓ 1. gather
-  ✓ 2. rank
-  ✓ 3. plan
+  ✓ 1. destination
+  ✓ 2. interests
+  ✓ 3. constraints
+  ✓ 4. itinerary
 
 Final output:
 
-┌ actionPlan ──────────────────────────┐
-│ ## Action Plan                       │
+┌ itinerary ───────────────────────────┐
+│ ## 7-Day Japan Itinerary             │
 │                                      │
-│ 1. **Fix login bug** — Reproduce     │
-│    with test account, patch session  │
-│    handler, add regression test.     │
-│ 2. **Add CSV export** — Add export   │
-│    button to list views, stream rows │
-│    to avoid memory issues.           │
-│ 3. **Redesign dashboard** — Start    │
-│    with wireframes, get stakeholder  │
-│    sign-off before dev.              │
+│ Day 1 — Tokyo: Arrive, explore       │
+│   Senso-ji temple, evening street    │
+│   food tour in Asakusa.             │
+│ Day 2 — Tokyo: Meiji Shrine in the   │
+│   morning, vegetarian ramen in       │
+│   Shinjuku.                          │
+│ Day 3 — Hakone: Day trip, hiking the │
+│   Old Tokaido Road, lake cruise.     │
+│ Day 4 — Kyoto: Fushimi Inari in the  │
+│   morning, Nishiki Market for        │
+│   street food.                       │
+│ Day 5 — Kyoto: Kinkaku-ji, afternoon │
+│   at Arashiyama bamboo grove.        │
+│ Day 6 — Nara: Todai-ji temple, deer  │
+│   park, vegetarian shojin ryori      │
+│   lunch.                             │
+│ Day 7 — Osaka: Dotonbori street      │
+│   food, Osaka Castle, depart.        │
 └──────────────────────────────────────┘
 
 (Progress file cleaned up)
@@ -187,7 +263,7 @@ Final output:
 
 **Reset:**
 ```
-$ thinker reset prioritise-tasks.json
+$ thinker reset travel-preferences.json
 ```
 
 ## Repo Map
