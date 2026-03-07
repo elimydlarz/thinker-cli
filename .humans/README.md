@@ -1,10 +1,35 @@
 # Thinker CLI
 
-Thinker CLI is an orchestrator that guides an AI agent through a multi-step thought process. It owns the plan; the agent owns the reasoning and the work.
+**Human-programmable multi-turn reasoning for AI agents.**
 
-The idea is simple: you define a sequence of steps in a JSON config file, and the CLI walks an agent through them one at a time. On each invocation, it tells the agent what to think about and exactly how to call back with its answer. The agent reasons, acts, calls back, and the CLI advances — step by step until the process completes.
+Thinker lets you define a multi-step thought process in a JSON config file, then hand it to any AI agent that can run CLI tools. The agent follows directions, calls back with structured output, and the CLI advances — step by step until the process completes. No framework integration, no SDK, no code. Just a config and a shell command.
 
-State is persisted to disk between invocations, so the agent can be stateless. The CLI remembers where you are.
+## The idea
+
+AI agents are powerful reasoners, but they drift. Give an agent a complex task and it'll skip steps, conflate concerns, or lose track of earlier conclusions. Thinker solves this by letting _you_ decompose the thought process into discrete steps, each with clear directions and a typed output contract. The agent executes them one at a time, and the CLI enforces the sequence.
+
+The key insight: **the human programs the reasoning process; the agent does the reasoning.** You control _what_ to think about and in _what order_. The agent controls _how_ to think about it.
+
+This separation works because:
+
+- **Step isolation** — the agent sees all step labels (so it knows the overall arc) but only the current step's directions and output shape. It never sees future steps' directions. This prevents agents from racing ahead or collapsing multiple steps into one.
+- **Typed output** — each step declares the exact JSON shape the agent must return. The CLI validates it. This forces the agent to produce structured, reusable results rather than free-form prose.
+- **Interpolation** — later steps can reference earlier outputs via `{{key}}` placeholders. The CLI renders these as labeled boxes in the directions, so the agent builds on its own prior reasoning naturally.
+- **Stateless agents** — the CLI persists all state to disk. The agent can be completely stateless between invocations. This means it works with any agent — Claude Code, OpenClaw, custom scripts, anything that can shell out.
+
+## Adding thinker to your agent
+
+Thinker works with any agent that can execute CLI commands. Some examples:
+
+**Claude Code** — add `thinker` as a tool in your CLAUDE.md or give the agent access to shell commands. It will read the CLI output, follow directions, and call back.
+
+**OpenClaw** — register `thinker` as a CLI tool. The agent receives the step directions as tool output and calls back with the required JSON.
+
+**Any MCP-compatible agent** — if your agent can run shell commands via MCP or a similar protocol, it can use thinker.
+
+**Custom agents** — parse the CLI's stdout in your agent loop. The output is human-readable but structured enough to extract programmatically if needed.
+
+The pattern is always the same: agent calls `thinker config.json`, reads the directions, does the work, calls `thinker config.json '{"key": value}'`, and repeats.
 
 ## Installation
 
@@ -65,7 +90,7 @@ The CLI prints the first step's directions, the output shape you need to provide
 $ thinker my-config.json '{"tasks": [{"id": "1", "title": "Fix login bug", "effort": "S"}]}'
 ```
 
-The CLI validates the JSON (right keys? valid JSON?), merges the output into its shared space, and shows the next step with interpolated values from prior steps.
+The CLI validates the JSON (right keys? right types?), merges the output into its shared space, and shows the next step with interpolated values from prior steps.
 
 ### 4. Repeat until done
 
@@ -81,11 +106,11 @@ Deletes the progress file so you can start over.
 
 ## How it works under the hood
 
-**Config** — a read-only JSON file defining the step sequence.
+**Config** — a read-only JSON file defining the step sequence. This is the thought process blueprint that the human authors.
 
 **Shared space** — a flat namespace of variables accumulated across steps. Each step's output keys merge into it. Keys are immutable and unique across all steps (enforced at config load time).
 
-**Progress file** — a hidden JSON file (`.thinker-progress-<hash>.json`) created alongside your config file. It stores the current step index and the shared space. This is how the CLI remembers where you are between invocations.
+**Progress file** — a hidden JSON file (`.thinker-progress-<hash>.json`) created alongside your config file. It stores the current step index and the shared space. This is how the CLI remembers where the agent is between invocations.
 
 **Interpolation** — `{{key}}` placeholders in directions are replaced with values from the shared space, rendered inside labeled boxes so the agent can clearly see what data is available.
 
@@ -113,7 +138,8 @@ Rules:
 - `output` must have at least one key
 - No two steps may declare the same output key
 
-The type descriptions in `output` are for the agent's understanding — the CLI only validates key presence, not value types.
+Run `thinker config-help` for a full authoring guide with supported types and examples.
+
 ## Development
 
 ```
