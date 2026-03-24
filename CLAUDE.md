@@ -164,7 +164,7 @@ To continue, run:
 
 **Invocation 4** — agent provides constraints, CLI shows final step with everything interpolated:
 ```
-$ thinker travel-preferences.json '{ "constraints": "Vegetarian. 7 days. Moderate pace — no more than 2 major activities per day." }'
+$ thinker travel-preferences '{ "constraints": "Vegetarian. 7 days. Moderate pace — no more than 2 major activities per day." }'
 ```
 ```
 Steps:
