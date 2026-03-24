@@ -56,14 +56,12 @@ This is inspired by an internal library that recursively iterates through precon
 See `examples/travel-preferences.json` for a ready-to-run sample config. Try it:
 
 ```
-$ thinker examples/travel-preferences.json
+$ thinker examples/travel-preferences
 ```
 ```
 Steps:
   ▶ 1. destination
-    2. interests
-    3. constraints
-    4. itinerary
+    + 3 more steps
 
 ╭──────────────────────────────────────╮
 │  STEP 1/4 — destination              │
@@ -75,7 +73,7 @@ Where do you want to go, and what's the vibe
 ────────────────────────────────────────
 To continue, run:
 
-  thinker travel-preferences.json '{
+  thinker travel-preferences '{
     "destination": string,
     "budget": "budget-friendly" | "mid-range" | "luxury"
   }'
@@ -83,7 +81,7 @@ To continue, run:
 
 The agent picks a destination and calls back:
 ```
-$ thinker travel-preferences.json '{ "destination": "Japan", "budget": "mid-range" }'
+$ thinker travel-preferences '{ "destination": "Japan", "budget": "mid-range" }'
 ```
 
 **Invocation 2** — CLI merges `destination` and `budget` into shared space, shows next step with them interpolated:
@@ -91,8 +89,7 @@ $ thinker travel-preferences.json '{ "destination": "Japan", "budget": "mid-rang
 Steps:
   ✓ 1. destination
   ▶ 2. interests
-    3. constraints
-    4. itinerary
+    + 2 more steps
 
 ╭──────────────────────────────────────╮
 │  STEP 2/4 — interests                │
