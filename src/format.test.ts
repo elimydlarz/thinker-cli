@@ -105,23 +105,50 @@ describe("format", () => {
 
   describe("formatStepList", () => {
     describe("when on step 0", () => {
-      it("marks step 0 as current and the rest as future", () => {
+      it("marks step 0 as current", () => {
         const list = formatStepList(steps, 0);
 
         expect(list).toMatch(/▶.*1\. gather/);
-        expect(list).toMatch(/2\. rank/);
-        expect(list).toMatch(/3\. plan/);
         expect(list).not.toContain("✓");
+      });
+
+      it("does not reveal future step labels", () => {
+        const list = formatStepList(steps, 0);
+
+        expect(list).not.toContain("rank");
+        expect(list).not.toContain("plan");
+      });
+
+      it("shows remaining step count", () => {
+        const list = formatStepList(steps, 0);
+
+        expect(list).toContain("+ 2 more steps");
       });
     });
 
     describe("when on a middle step", () => {
-      it("marks prior steps as completed, current as active, rest as future", () => {
+      it("marks prior steps as completed", () => {
         const list = formatStepList(steps, 1);
 
         expect(list).toMatch(/✓.*1\. gather/);
+      });
+
+      it("marks current step as active", () => {
+        const list = formatStepList(steps, 1);
+
         expect(list).toMatch(/▶.*2\. rank/);
-        expect(list).toMatch(/3\. plan/);
+      });
+
+      it("does not reveal future step labels", () => {
+        const list = formatStepList(steps, 1);
+
+        expect(list).not.toContain("plan");
+      });
+
+      it("shows remaining step count", () => {
+        const list = formatStepList(steps, 1);
+
+        expect(list).toContain("+ 1 more step");
       });
     });
 
@@ -133,6 +160,12 @@ describe("format", () => {
         expect(list).toMatch(/✓.*2\. rank/);
         expect(list).toMatch(/✓.*3\. plan/);
         expect(list).not.toContain("▶");
+      });
+
+      it("does not show remaining count", () => {
+        const list = formatStepList(steps, 3);
+
+        expect(list).not.toContain("more step");
       });
     });
   });
