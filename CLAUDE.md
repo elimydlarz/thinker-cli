@@ -219,7 +219,7 @@ To continue, run:
 
 **Invocation 5** — agent provides the itinerary, process completes:
 ```
-$ thinker travel-preferences.json '{ "itinerary": "## 7-Day Japan Itinerary\n\nDay 1 — Tokyo: Arrive, explore Senso-ji temple, evening street food tour in Asakusa.\nDay 2 — Tokyo: Meiji Shrine in the morning, vegetarian ramen in Shinjuku.\nDay 3 — Hakone: Day trip, hiking the Old Tokaido Road, lake cruise.\nDay 4 — Kyoto: Fushimi Inari in the morning, Nishiki Market for street food.\nDay 5 — Kyoto: Kinkaku-ji, afternoon at Arashiyama bamboo grove.\nDay 6 — Nara: Todai-ji temple, deer park, vegetarian shojin ryori lunch.\nDay 7 — Osaka: Dotonbori street food, Osaka Castle, depart." }'
+$ thinker travel-preferences '{ "itinerary": "## 7-Day Japan Itinerary\n\nDay 1 — Tokyo: Arrive, explore Senso-ji temple, evening street food tour in Asakusa.\nDay 2 — Tokyo: Meiji Shrine in the morning, vegetarian ramen in Shinjuku.\nDay 3 — Hakone: Day trip, hiking the Old Tokaido Road, lake cruise.\nDay 4 — Kyoto: Fushimi Inari in the morning, Nishiki Market for street food.\nDay 5 — Kyoto: Kinkaku-ji, afternoon at Arashiyama bamboo grove.\nDay 6 — Nara: Todai-ji temple, deer park, vegetarian shojin ryori lunch.\nDay 7 — Osaka: Dotonbori street food, Osaka Castle, depart." }'
 ```
 ```
 ╭──────────────────────────────────────╮
