@@ -212,7 +212,7 @@ plan.
 ────────────────────────────────────────
 To continue, run:
 
-  thinker travel-preferences.json '{
+  thinker travel-preferences '{
     "itinerary": string
   }'
 ```
