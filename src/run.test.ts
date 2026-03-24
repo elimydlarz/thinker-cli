@@ -347,6 +347,68 @@ describe("run", () => {
     });
   });
 
+  describe("extensionless config path", () => {
+    it("resolves a config path without .json extension", () => {
+      const configPath = writeConfig(twoStepConfig);
+      const withoutExt = configPath.replace(/\.json$/, "");
+
+      const result = run([withoutExt]);
+
+      expect(result.exitCode).toBe(0);
+      expect(result.output).toContain("List tasks.");
+    });
+
+    it("strips .json from the display path in callback commands", () => {
+      const configPath = writeConfig(twoStepConfig);
+
+      const result = run([configPath]);
+
+      expect(result.output).toContain("To continue, run:");
+      expect(result.output).not.toContain(".json");
+    });
+
+    it("strips .json from the display path in manual", () => {
+      const configPath = writeConfig(twoStepConfig);
+      run([configPath]); // start
+
+      const result = run([configPath]); // start again — triggers error with manual
+
+      expect(result.output).toContain("THINKER");
+      expect(result.output).not.toContain(".json");
+    });
+
+    it("tracks progress correctly when started with extensionless path", () => {
+      const configPath = writeConfig(twoStepConfig);
+      const withoutExt = configPath.replace(/\.json$/, "");
+
+      run([withoutExt]);
+
+      expect(readProgress(configPath)).not.toBeNull();
+    });
+
+    it("continues correctly when started with extensionless path", () => {
+      const configPath = writeConfig(twoStepConfig);
+      const withoutExt = configPath.replace(/\.json$/, "");
+      run([withoutExt]);
+
+      const result = run([withoutExt, '{"tasks": ["a"]}']);
+
+      expect(result.exitCode).toBe(0);
+      expect(result.output).toContain("Rank them.");
+    });
+
+    it("resets correctly with extensionless path", () => {
+      const configPath = writeConfig(twoStepConfig);
+      run([configPath]);
+
+      const withoutExt = configPath.replace(/\.json$/, "");
+      const result = run(["reset", withoutExt]);
+
+      expect(result.exitCode).toBe(0);
+      expect(existsSync(progressFilePath(configPath))).toBe(false);
+    });
+  });
+
   describe("config-help — thinker config-help", () => {
     it("shows config writing instructions", () => {
       const result = run(["config-help"]);
