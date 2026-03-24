@@ -209,12 +209,21 @@ function handleContinue(
   };
 }
 
+function stripJsonExtension(p: string): string {
+  return p.endsWith(".json") ? p.slice(0, -5) : p;
+}
+
 function handleReset(args: string[]): RunResult {
   if (args.length === 0) {
     return error("Reset requires a config path.", "<config>");
   }
 
-  const configPath = resolve(args[0]);
+  let configPath: string;
+  try {
+    configPath = resolveConfigPath(resolve(args[0]));
+  } catch {
+    configPath = resolve(args[0]);
+  }
   deleteProgress(configPath);
 
   return {
