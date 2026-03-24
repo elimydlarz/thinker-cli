@@ -21,6 +21,43 @@ describe("config", () => {
     return path;
   }
 
+  describe("resolveConfigPath", () => {
+    describe("given a path that exists as-is", () => {
+      it("returns that path unchanged", () => {
+        const path = writeConfig({ steps: [] });
+
+        expect(resolveConfigPath(path)).toBe(path);
+      });
+    });
+
+    describe("given a path without .json extension", () => {
+      it("appends .json and returns the resolved path", () => {
+        const path = writeConfig({ steps: [] });
+        const withoutExt = path.replace(/\.json$/, "");
+
+        expect(resolveConfigPath(withoutExt)).toBe(path);
+      });
+    });
+
+    describe("given a path where both exact and .json exist", () => {
+      it("prefers the exact path", () => {
+        const jsonPath = writeConfig({ steps: [] });
+        const exactPath = jsonPath.replace(/\.json$/, "");
+        writeFileSync(exactPath, "{}");
+
+        expect(resolveConfigPath(exactPath)).toBe(exactPath);
+      });
+    });
+
+    describe("given a path that does not exist in either form", () => {
+      it("throws with a not-found error", () => {
+        expect(() => resolveConfigPath(join(tmpDir, "nope"))).toThrow(
+          /not found/i
+        );
+      });
+    });
+  });
+
   describe("loadConfig", () => {
     describe("given a valid config file", () => {
       it("parses steps with label, directions, and output", () => {
