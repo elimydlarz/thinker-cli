@@ -117,14 +117,14 @@ To continue, run:
 
 **Invocation 3** — agent provides interests, CLI shows constraints step with all prior values interpolated:
 ```
-$ thinker travel-preferences.json '{ "interests": [{"name":"street food","priority":"must-do"},{"name":"temples","priority":"must-do"},{"name":"hiking","priority":"nice-to-have"}] }'
+$ thinker travel-preferences '{ "interests": [{"name":"street food","priority":"must-do"},{"name":"temples","priority":"must-do"},{"name":"hiking","priority":"nice-to-have"}] }'
 ```
 ```
 Steps:
   ✓ 1. destination
   ✓ 2. interests
   ▶ 3. constraints
-    4. itinerary
+    + 1 more step
 
 ╭──────────────────────────────────────╮
 │  STEP 3/4 — constraints              │
