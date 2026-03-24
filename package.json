@@ -1,6 +1,6 @@
 {
   "name": "@susu-eng/thinker-cli",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "An orchestrator that guides an AI agent through a multi-step thought process",
   "type": "module",
   "files": [
