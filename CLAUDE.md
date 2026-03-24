@@ -262,7 +262,7 @@ Final output:
 
 **Reset:**
 ```
-$ thinker reset travel-preferences.json
+$ thinker reset travel-preferences
 ```
 
 ## Repo Map
