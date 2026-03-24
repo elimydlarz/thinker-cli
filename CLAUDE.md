@@ -110,7 +110,7 @@ how important each one is.
 ────────────────────────────────────────
 To continue, run:
 
-  thinker travel-preferences.json '{
+  thinker travel-preferences '{
     "interests": Array<{ "name": string; "priority": "must-do" | "nice-to-have" }>
   }'
 ```
