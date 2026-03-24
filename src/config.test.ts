@@ -55,6 +55,12 @@ describe("config", () => {
           /not found/i
         );
       });
+
+      it("mentions the .json suffix it tried", () => {
+        expect(() => resolveConfigPath(join(tmpDir, "nope"))).toThrow(
+          /\.json/
+        );
+      });
     });
   });
 
