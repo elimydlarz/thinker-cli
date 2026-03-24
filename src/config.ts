@@ -1,14 +1,19 @@
 import { readFileSync, existsSync } from "node:fs";
 import type { Config, Step } from "./types.js";
 
+export function resolveConfigPath(configPath: string): string {
+  if (existsSync(configPath)) return configPath;
+  const withExt = configPath + ".json";
+  if (existsSync(withExt)) return withExt;
+  throw new Error(`Config file not found: ${configPath}`);
+}
+
 export function loadConfig(configPath: string): Config {
-  if (!existsSync(configPath)) {
-    throw new Error(`Config file not found: ${configPath}`);
-  }
+  const resolvedPath = resolveConfigPath(configPath);
 
   let raw: unknown;
   try {
-    raw = JSON.parse(readFileSync(configPath, "utf-8"));
+    raw = JSON.parse(readFileSync(resolvedPath, "utf-8"));
   } catch (e) {
     if (e instanceof SyntaxError) {
       throw new Error(`Failed to parse config file: ${e.message}`);
