@@ -216,6 +216,16 @@ function handleContinue(
   };
 }
 
+function getVersion(): string {
+  const pkgPath = join(
+    dirname(fileURLToPath(import.meta.url)),
+    "..",
+    "package.json"
+  );
+  const pkg = JSON.parse(readFileSync(pkgPath, "utf-8"));
+  return pkg.version;
+}
+
 function stripJsonExtension(p: string): string {
   return p.endsWith(".json") ? p.slice(0, -5) : p;
 }
