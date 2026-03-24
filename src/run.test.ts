@@ -337,6 +337,29 @@ describe("run", () => {
     });
   });
 
+  describe("version — thinker version / -v / --version", () => {
+    it("shows the version from package.json", () => {
+      const result = run(["version"]);
+
+      expect(result.exitCode).toBe(0);
+      expect(result.output).toMatch(/\d+\.\d+\.\d+/);
+    });
+
+    it("accepts -v flag", () => {
+      const result = run(["-v"]);
+
+      expect(result.exitCode).toBe(0);
+      expect(result.output).toMatch(/\d+\.\d+\.\d+/);
+    });
+
+    it("accepts --version flag", () => {
+      const result = run(["--version"]);
+
+      expect(result.exitCode).toBe(0);
+      expect(result.output).toMatch(/\d+\.\d+\.\d+/);
+    });
+  });
+
   describe("no arguments", () => {
     it("shows manual without error", () => {
       const result = run([]);
