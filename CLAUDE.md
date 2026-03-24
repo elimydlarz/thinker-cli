@@ -22,11 +22,11 @@ This is inspired by an internal library that recursively iterates through precon
 
 ### Lifecycle
 
-1. `thinker config.json` — no progress file exists, so the CLI starts at step 0 (no args). Prints the user manual, the step list, and the first step's directions + output shape.
-2. `thinker config.json '{"key": value}'` — progress file exists. The CLI validates the JSON keys match the current step's output declaration, merges them into the shared space, saves progress, advances to the next step, and prints that step's directions (with interpolated values) + output shape.
+1. `thinker config` — no progress file exists, so the CLI starts at step 0 (no args). Prints the step list and the first step's directions + output shape. The `.json` extension is optional — the CLI resolves it automatically.
+2. `thinker config '{"key": value}'` — progress file exists. The CLI validates the JSON keys match the current step's output declaration, merges them into the shared space, saves progress, advances to the next step, and prints that step's directions (with interpolated values) + output shape.
 3. Repeat until all steps are complete.
 4. On the final invocation, the CLI emits the completed result and cleans up the progress file.
-5. `thinker reset config.json` — deletes the progress file at any point, allowing a fresh start.
+5. `thinker reset config` — deletes the progress file at any point, allowing a fresh start.
 
 ## Requirements
 
