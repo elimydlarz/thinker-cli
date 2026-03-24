@@ -30,6 +30,11 @@ export function run(args: string[]): RunResult {
     };
   }
 
+  // Version command
+  if (args[0] === "version" || args[0] === "-v" || args[0] === "--version") {
+    return { output: getVersion(), exitCode: 0 };
+  }
+
   // Config help command
   if (args[0] === "config-help") {
     return { output: formatConfigHelp(), exitCode: 0 };
