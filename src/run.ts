@@ -1,4 +1,6 @@
-import { resolve } from "node:path";
+import { resolve, dirname, join } from "node:path";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { loadConfig, resolveConfigPath } from "./config.js";
 import { readProgress, writeProgress, deleteProgress } from "./progress.js";
 import {
