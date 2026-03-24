@@ -67,13 +67,14 @@ describe("run", () => {
       expect(result.output).not.toContain("THINKER");
     });
 
-    it("shows the step list with step 1 highlighted", () => {
+    it("shows the step list with step 1 highlighted and future steps hidden", () => {
       const configPath = writeConfig(twoStepConfig);
 
       const result = run([configPath]);
 
       expect(result.output).toMatch(/▶.*1\. gather/);
-      expect(result.output).toMatch(/2\. rank/);
+      expect(result.output).not.toContain("rank");
+      expect(result.output).toContain("+ 1 more step");
     });
 
     it("shows the callback instruction with step 1 output shape", () => {
