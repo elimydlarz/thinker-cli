@@ -157,7 +157,7 @@ trip length)
 ────────────────────────────────────────
 To continue, run:
 
-  thinker travel-preferences.json '{
+  thinker travel-preferences '{
     "constraints": string
   }'
 ```
