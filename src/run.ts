@@ -1,5 +1,5 @@
 import { resolve } from "node:path";
-import { loadConfig } from "./config.js";
+import { loadConfig, resolveConfigPath } from "./config.js";
 import { readProgress, writeProgress, deleteProgress } from "./progress.js";
 import {
   formatManual,
