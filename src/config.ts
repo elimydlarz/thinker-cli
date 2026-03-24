@@ -5,7 +5,7 @@ export function resolveConfigPath(configPath: string): string {
   if (existsSync(configPath)) return configPath;
   const withExt = configPath + ".json";
   if (existsSync(withExt)) return withExt;
-  throw new Error(`Config file not found: ${configPath}`);
+  throw new Error(`Config file not found: ${configPath} (also tried ${withExt})`);
 }
 
 export function loadConfig(configPath: string): Config {
