@@ -38,21 +38,28 @@ export function run(args: string[]): RunResult {
     return handleReset(args.slice(1));
   }
 
-  const configPath = resolve(args[0]);
+  const displayPath = stripJsonExtension(args[0]);
+
+  let configPath: string;
+  try {
+    configPath = resolveConfigPath(resolve(args[0]));
+  } catch (e) {
+    return error((e as Error).message, displayPath);
+  }
 
   // Load config
   let config: Config;
   try {
     config = loadConfig(configPath);
   } catch (e) {
-    return error((e as Error).message, args[0]);
+    return error((e as Error).message, displayPath);
   }
 
   if (args.length === 1) {
-    return handleStart(configPath, config, args[0]);
+    return handleStart(configPath, config, displayPath);
   }
 
-  return handleContinue(configPath, config, args[0], args[1]);
+  return handleContinue(configPath, config, displayPath, args[1]);
 }
 
 function handleStart(
